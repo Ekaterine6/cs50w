@@ -1,4 +1,10 @@
-.h2 {
+h2 {
     color: purple;
     height: 30px;
+    text-align: center;
+}
+
+.button {
+    width: auto;
+    height: auto;
 }
