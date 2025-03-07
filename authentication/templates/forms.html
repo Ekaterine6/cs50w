@@ -4,20 +4,19 @@
         <title>დამატება</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/authentication/static/styles.css">
+        <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body>
         <div class="buttons">
             <a href="/templates/index.html">მთავარი</a>
         </div>
-        <form class="add" id="Form">
+        <form class="add" id="Form" action="/submit-form" method="post">
             <input id="name" name="name" type="text" placeholder="სახელი" maxlength="15" required>
             <input id="surname" name="surname" type="text" placeholder="გვარი" maxlength="20" required>
             <input id="email" name="email" type="email" placeholder="email@gmail.com" required>
-            <input id="number" name="number" type="tel" placeholder="000 00 00 00" required>
-            <input id="submit-btn" name="submit-btn" class="btn btn-primary" type="button" value="submit">
+            <input id="phone" name="phone" type="tel" placeholder="000 00 00 00" required>
+            <input id="submit-btn" name="submit-btn" class="btn btn-primary" type="submit" value="submit">
         </form>
-        <p id="success" style="display: none;">ფორმა შენახულია</p>
-        <script src="script.js"></script>
+        <script src="/templates/script.js"></script>
     </body>
 </html>

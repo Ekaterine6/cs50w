@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/Ekaterine6/cs50w/issues"
   },
-  "homepage": "https://github.com/Ekaterine6/cs50w#readme"
+  "homepage": "https://github.com/Ekaterine6/cs50w#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "mysql": "^2.18.1"
+  }
 }
