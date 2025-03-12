@@ -1,10 +1,143 @@
-h2 {
-    color: purple;
-    height: 30px;
-    text-align: center;
+body {
+    background-color: rgb(121, 128, 129);
 }
 
-.button {
-    width: auto;
-    height: auto;
+h2 {
+    text-align: center;
+    font-size: 30px;
 }
+
+/* index.html button */
+.home_button{ 
+    font-size: 20px;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    margin: 10px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.home_button:hover {
+    background-color: #444;
+    color:aliceblue;
+  }
+  
+
+/* sidebar */
+.menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+.menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .menu a:hover {
+    color: #f1f1f1;
+  }
+  
+  .menu .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  .openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+  }
+  
+  .openbtn:hover {
+    background-color: #444;
+  }
+  
+  #menubtn {
+    transition: margin-left .5s;
+    padding: 16px;
+  }
+  
+  /*form style
+  .formss {
+  }
+
+  .formss input {
+  }
+  */
+
+  .submit_btn {
+    font-size: 20px;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    margin: 10px;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .submit_btn:hover {
+    background-color: #444;
+    color:aliceblue;
+  }
+  
+  .add {
+    background-color: #7a8596;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+    text-align: center;
+    margin: 50px;
+  }
+
+  .add_course {
+    background-color: #7a8596;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+    margin: 50px;
+    text-align: center;
+  }
+
+  .student_rows {
+    font-size: 20px;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    margin: 10px;
+    display: inline-block;
+    text-decoration: none;
+  }
+  .student_rows:hover {
+    background-color: #444;
+    color:aliceblue;
+  }
+
+  table {
+    border-collapse: collapse; 
+    width: 100%;
+  }
+
+  table, th, td { 
+    border: 1px solid #ccc; 
+  }

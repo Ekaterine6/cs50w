@@ -5,17 +5,69 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/static/styles.css">
+        <style>
+            .formss label::after {
+                content: ' ✓';
+                color: green;
+                display: none;
+            }
+            .formss input[type="checkbox"]:checked + label::after {
+                display: inline;
+            }
+        </style>
     </head>
     <body>
-        <div class="buttons">
-            <a href="/templates/index.html">მთავარი</a>
-        </div>
+        <h2>ახალი კურსის დაწყება</h2>
+        <a class="home_button" href="/">მთავარი</a>
+        <!--new course-->
+        <form class="add_course" id="course_form" action="submit-form" method="post">
+            <h3>კურსის ინფორმაცია</h3>
+            <label for="classes">კლასების რაოდენობა:</label><br>
+            <input id="classes"name="classes" type="number" placeholder="00" min="5" max="20" required><br>
+
+            <label for="nmb_students">სტუდენტების რაოდენობა:</label><br>
+            <input id="nmb_students" name="nmb_students" type="number" min="1" max="50" placeholder="00" required><br>
+
+            <label for="week">კვირის განრიგი:</label><br>
+            <div id="week">
+            <div class="formss">
+                <input type="time" id="monday_time" name="monday_time">
+                <label for="monday">ორშაბათი</label>
+            </div>
+            <div class="formss">
+                <input type="time" id="tuesday_time" name="tuesday_time">
+                <label for="tuesday">სამშაბათი</label>
+            </div>
+            <div class="formss">
+                <input type="time" id="wednesday_time" name="wednesday_time">
+                <label for="wednesday">ოთხშაბათი</label>
+            </div>
+            <div class="formss">
+                <input type="time" id="thursday_time" name="thursday_time">
+                <label for="thursday">ხუთშაბათი</label>
+            </div>
+            <div class="formss">
+                <input type="time" id="friday_time" name="friday_time">
+                <label for="friday">პარასკევი</label>
+            </div>
+            <div class="formss">
+                <input type="time" id="saturday_time" name="saturday_time">
+                <label for="saturday">შაბათი</label>
+            </div>
+            <div class="formss">
+                <input type="time" id="sunday_time" name="sunday_time">
+                <label for="sunday">კვირა</label>
+            </div>
+            </div>
+            <input type="button" class="student_rows" id="student_rows" value="სტუდენტების დამატება">
+        </form>
+
+        <!--adding the students-->
         <form class="add" id="Form" action="/submit-form" method="post">
-            <input id="name" name="name" type="text" placeholder="სახელი" maxlength="15" required>
-            <input id="surname" name="surname" type="text" placeholder="გვარი" maxlength="20" required>
-            <input id="email" name="email" type="email" placeholder="email@gmail.com" required>
-            <input id="phone" name="phone" type="tel" placeholder="000 00 00 00" required>
-            <input id="submit-btn" name="submit-btn" class="btn btn-primary" type="submit" value="submit">
+            <h3>სტუდენტის ინფორმაცია</h3>
+            <div id="students_container" class="formss">
+            </div>
+            <input id="submit-btn" name="submit-btn" class="submit_btn" type="submit" value="დამატება">
         </form>
         <script src="/templates/script.js"></script>
     </body>

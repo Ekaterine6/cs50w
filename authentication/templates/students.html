@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Courses and Students</title>
+    <title>Information</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
@@ -10,20 +10,18 @@
     </style>
 </head>
 <body>
-    <h2>კურსები და სტუდენტები</h2>
+    <h2>კურსების და სტუდენტების ინფორმაცია</h2>
     <a class="home_button" href="/">მთავარი</a>
 
     <table id="courses-table">
         <thead>
             <tr>
-                <th>კურსის ID</th>
-                <th>ორშაბათი</th>
-                <th>სამშაბათი</th>
-                <th>ოთხშაბათი</th>
-                <th>ხუთშაბათი</th>
-                <th>პარასკევი</th>
-                <th>შაბათი</th>
-                <th>კვირა</th>
+                <th>კურსის ID და რაოდენობა</th>
+                <th>სტუდენტის ID</th>
+                <th>სახელი</th>
+                <th>გვარი</th>
+                <th>Email</th>
+                <th>ტელეფონი</th>
             </tr>
         </thead>
         <tbody id="courses-tbody">
@@ -40,14 +38,12 @@
             data.forEach(course => {
               const row = document.createElement('tr');
               row.innerHTML = `
-                <td>${course.course_id}</td>
-                <td>${course.monday}</td>
-                <td>${course.tuesday}</td>
-                <td>${course.wednesday}</td>
-                <td>${course.thursday}</td>
-                <td>${course.friday}</td>
-                <td>${course.saturday}</td>
-                <td>${course.sunday}</td>
+                <td>${course.course_id} - ${course.classes}</td>
+                <td>${course.student_id}</td>
+                <td>${course.name}</td>
+                <td>${course.surname}</td>
+                <td>${course.email}</td>
+                <td>${course.phone}</td>
               `;
               tbody.appendChild(row);
             });

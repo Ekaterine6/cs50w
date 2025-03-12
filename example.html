@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Student Form</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script>
+        function generateStudentFields() {
+            const nmbStudents = document.getElementById('nmb_students').value;
+            const studentFieldsContainer = document.getElementById('student_fields');
+            studentFieldsContainer.innerHTML = '';  // Clear any existing fields
+
+            for (let i = 0; i < nmbStudents; i++) {
+                const div = document.createElement('div');
+                div.className = 'formss';
+
+                const nameLabel = document.createElement('label');
+                nameLabel.setAttribute('for', `student_name_${i}`);
+                nameLabel.innerText = `Student ${i + 1} Name:`;
+                div.appendChild(nameLabel);
+
+                const nameInput = document.createElement('input');
+                nameInput.setAttribute('type', 'text');
+                nameInput.setAttribute('id', `student_name_${i}`);
+                nameInput.setAttribute('name', `student_name_${i}`);
+                nameInput.setAttribute('placeholder', 'Name');
+                nameInput.setAttribute('required', 'required');
+                div.appendChild(nameInput);
+
+                const surnameLabel = document.createElement('label');
+                surnameLabel.setAttribute('for', `student_surname_${i}`);
+                surnameLabel.innerText = `Student ${i + 1} Surname:`;
+                div.appendChild(surnameLabel);
+
+                const surnameInput = document.createElement('input');
+                surnameInput.setAttribute('type', 'text');
+                surnameInput.setAttribute('id', `student_surname_${i}`);
+                surnameInput.setAttribute('name', `student_surname_${i}`);
+                surnameInput.setAttribute('placeholder', 'Surname');
+                surnameInput.setAttribute('required', 'required');
+                div.appendChild(surnameInput);
+
+                studentFieldsContainer.appendChild(div);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <h3>Course Information</h3>
+        <form class="add_course" id="course_form" action="/submit-course-form" method="post">
+            <div class="formss">
+                <label for="classes">Number of Classes:</label><br>
+                <input id="classes" name="classes" type="number" placeholder="00" min="5" max="20" required><br>
+            </div>
+            <div class="formss">
+                <label for="nmb_students">Number of Students:</label><br>
+                <input id="nmb_students" name="nmb_students" type="number" min="1" max="50" placeholder="00" required><br>
+                <button type="button" onclick="generateStudentFields()">Generate Student Fields</button>
+            </div>
+            <div id="student_fields"></div>
+            <input id="submit-btn" name="submit-btn" class="submit_btn" type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>
