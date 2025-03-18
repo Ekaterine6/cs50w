@@ -11,12 +11,13 @@
 </head>
 <body>
     <h2>კურსების და სტუდენტების ინფორმაცია</h2>
-    <a class="home_button" href="/">მთავარი</a>
+    <a class="home_button" href="/index.html">მთავარი</a>
 
     <table id="courses-table">
         <thead>
             <tr>
                 <th>კურსის ID და რაოდენობა</th>
+                <th>ჯგუფი</th>
                 <th>სტუდენტის ID</th>
                 <th>სახელი</th>
                 <th>გვარი</th>
@@ -39,6 +40,7 @@
               const row = document.createElement('tr');
               row.innerHTML = `
                 <td>${course.course_id} - ${course.classes}</td>
+                <td>${course.group_name}</td>
                 <td>${course.student_id}</td>
                 <td>${course.name}</td>
                 <td>${course.surname}</td>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        th, td { padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h2>კურსის ისტორიის წაშლა</h2>
+    <a class="home_button" href="/index.html">მთავარი</a>
+    
+    <button class="home_button" id="delete">წაშლა</button>
+    <div id="securityQuestionModal" style="display:none">
+        <h2 id="securityQuestion">მასწავლებლის წაშლის უფლებების დასამტკიცებელი კოდი</h2>
+        <input type="text" id="securityAnswer" placeholder="კოდი"><br>
+        <button id="verifyAnswer" class="verify_button">წაშლა</button>
+        <button id="cancel" class="cancel_button">გაუქმება</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const deleteButton = document.getElementById("delete");
+            const securityQuestionModal = document.getElementById("securityQuestionModal");
+            const securityQuestionText = document.getElementById("securityQuestion");
+            const securityAnswerInput = document.getElementById("securityAnswer");
+            const verifyAnswerButton = document.getElementById("verifyAnswer");
+            const cancelButton = document.getElementById("cancel");
+
+            const securityQuestion = "მასწავლებლის ვერიფიკაციის კოდი: ";
+            const correctAnswer = "მასწ11";
+
+            deleteButton.addEventListener("click", function() {
+                securityQuestionText.textContent = securityQuestion;
+                securityQuestionModal.style.display = "block";
+            });
+
+            verifyAnswerButton.addEventListener("click", function() {
+                const userAnswer = securityAnswerInput.value.trim();
+                if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    fetch("/delete-course-history", {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("კურსის ისტორია წაშლილია.");
+                        } else {
+                            alert("წაშლის პროცესში პრობლემა აღმოჩნდა.");
+                        }
+                        securityQuestionModal.style.display = "none";
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("ისტორიის წაშლა არ განხორციელდა.");
+                        securityQuestionModal.style.display = "none";
+                    });
+                } else {
+                    alert("არასწორი ვერიფიკაციის კოდი.");
+                }
+            });
+
+            cancelButton.addEventListener("click", function() {
+                securityQuestionModal.style.display = "none";
+            });
+        });
+    </script>
+
+
+</body>
+</html>

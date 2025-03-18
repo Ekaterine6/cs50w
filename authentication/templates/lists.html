@@ -6,17 +6,17 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-      th, td { padding: 8px; text-align: left; }
+        th, td { padding: 8px; text-align: left; }
     </style>
 </head>
 <body>
     <h2>კურსები და სტუდენტები</h2>
-    <a class="home_button" href="/">მთავარი</a>
+    <a class="home_button" href="/index.html">მთავარი</a>
 
     <table id="courses-table">
         <thead>
             <tr>
-                <th>კურსის ID</th>
+                <th>ჯგუფის დასახელება</th>
                 <th>ორშაბათი</th>
                 <th>სამშაბათი</th>
                 <th>ოთხშაბათი</th>
@@ -33,27 +33,27 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-        fetch('/fetch-courses-data')
-          .then(response => response.json())
-          .then(data => {
+    fetch('/fetch-courses-data')
+        .then(response => response.json())
+        .then(data => {
             const tbody = document.getElementById("courses-tbody");
             data.forEach(course => {
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                <td>${course.course_id}</td>
-                <td>${course.monday}</td>
-                <td>${course.tuesday}</td>
-                <td>${course.wednesday}</td>
-                <td>${course.thursday}</td>
-                <td>${course.friday}</td>
-                <td>${course.saturday}</td>
-                <td>${course.sunday}</td>
-              `;
-              tbody.appendChild(row);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${course.group_name}</td>
+                    <td>${course.monday} - ${course.monday_end}</td>
+                    <td>${course.tuesday} - ${course.tuesday_end}</td>
+                    <td>${course.wednesday} - ${course.wednesday_end}</td>
+                    <td>${course.thursday} - ${course.thursday_end}</td>
+                    <td>${course.friday} - ${course.friday_end}</td>
+                    <td>${course.saturday} - ${course.saturday_end}</td>
+                    <td>${course.sunday} - ${course.sunday_end}</td>
+                `;
+                tbody.appendChild(row);
             });
-          })
-          .catch(error => console.error('Error, unable to get students:', error));
-      });
+        })
+        .catch(error => console.error('Error, unable to get students:', error));
+        });
     </script>
 </body>
 </html>

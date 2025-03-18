@@ -18,8 +18,13 @@
   },
   "homepage": "https://github.com/Ekaterine6/cs50w#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "mysql": "^2.18.1"
+    "express-session": "^1.18.1",
+    "mongoose": "^8.12.1",
+    "mysql": "^2.18.1",
+    "twilio": "^5.5.0"
   }
 }

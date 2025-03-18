@@ -5,61 +5,68 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/static/styles.css">
-        <style>
-            .formss label::after {
-                content: ' ✓';
-                color: green;
-                display: none;
-            }
-            .formss input[type="checkbox"]:checked + label::after {
-                display: inline;
-            }
-        </style>
     </head>
     <body>
         <h2>ახალი კურსის დაწყება</h2>
-        <a class="home_button" href="/">მთავარი</a>
+        <a class="home_button" href="/index.html">მთავარი</a>
         <!--new course-->
         <form class="add_course" id="course_form" action="submit-form" method="post">
-            <h3>კურსის ინფორმაცია</h3>
-            <label for="classes">კლასების რაოდენობა:</label><br>
-            <input id="classes"name="classes" type="number" placeholder="00" min="5" max="20" required><br>
+            <h3>შეიყვანეთ კურსის ინფორმაცია</h3>
+            <label for="group_name">ჯგუფის სახელი:</label><br>
+            <input type="text" id="group_name" name="group_name" placeholder="ჯგუფის სახელი" required><br>
+
+            <label for="classes">გაკვეთილების რაოდენობა:</label><br>
+            <input id="classes"name="classes" type="number" placeholder="00" required><br>
 
             <label for="nmb_students">სტუდენტების რაოდენობა:</label><br>
-            <input id="nmb_students" name="nmb_students" type="number" min="1" max="50" placeholder="00" required><br>
+            <input id="nmb_students" name="nmb_students" type="number" placeholder="00" required><br>
 
             <label for="week">კვირის განრიგი:</label><br>
             <div id="week">
             <div class="formss">
-                <input type="time" id="monday_time" name="monday_time">
-                <label for="monday">ორშაბათი</label>
+                <label for="monday">ორშაბათი - დაწყება</label>
+                <input type="time" id="monday" name="monday">
+                <input type="time" id="monday_end" name="monday_end">
+                <label for="monday_end">დასასრული</label>
             </div>
             <div class="formss">
-                <input type="time" id="tuesday_time" name="tuesday_time">
-                <label for="tuesday">სამშაბათი</label>
+                <label for="tuesday">სამშაბათი - დაწყება</label>
+                <input type="time" id="tuesday" name="tuesday">
+                <input type="time" id="tuesday_end" name="tuesday_end">
+                <label for="tuesday_end">დასასრული</label>
             </div>
             <div class="formss">
-                <input type="time" id="wednesday_time" name="wednesday_time">
-                <label for="wednesday">ოთხშაბათი</label>
+                <label for="wednesday">ოთხშაბათი - დაწყება</label>
+                <input type="time" id="wednesday" name="wednesday">
+                <input type="time" id="wednesday_end" name="wednesday_end">
+                <label for="wednesday_end">დასასრული</label>
             </div>
             <div class="formss">
-                <input type="time" id="thursday_time" name="thursday_time">
-                <label for="thursday">ხუთშაბათი</label>
+                <label for="thursday">ხუთშაბათი - დაწყება</label>
+                <input type="time" id="thursday" name="thursday">
+                <input type="time" id="thursday_end" name="thursday_end">
+                <label for="thursday_end">დასასრული</label>
             </div>
             <div class="formss">
-                <input type="time" id="friday_time" name="friday_time">
-                <label for="friday">პარასკევი</label>
+                <label for="friday">პარასკევი - დაწყება</label>
+                <input type="time" id="friday" name="friday">
+                <input type="time" id="friday_end" name="friday_end">
+                <label for="friday_end">დასასრული</label>
             </div>
             <div class="formss">
-                <input type="time" id="saturday_time" name="saturday_time">
-                <label for="saturday">შაბათი</label>
+                <label for="saturday">შაბათი - დაწყება</label>
+                <input type="time" id="saturday" name="saturday">
+                <input type="time" id="saturday_end" name="saturday_end">
+                <label for="saturday_end">დასასრული</label>
             </div>
             <div class="formss">
-                <input type="time" id="sunday_time" name="sunday_time">
-                <label for="sunday">კვირა</label>
+                <label for="sunday">კვირა - დაწყება</label>
+                <input type="time" id="sunday" name="sunday">
+                <input type="time" id="sunday_end" name="sunday_end">
+                <label for="sunday_end">დასასრული</label>
             </div>
             </div>
-            <input type="button" class="student_rows" id="student_rows" value="სტუდენტების დამატება">
+            <button type="button" class="student_rows" id="student_rows">შექმნა</button>
         </form>
 
         <!--adding the students-->

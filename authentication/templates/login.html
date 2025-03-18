@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>რეგისტრაცია</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/static/styles.css">
+    </head>
+    <body>
+        <form action="/login" method="POST">
+            <label for="login_email">Email</label>
+            <input id="login_email" name="email" type="email" placeholder="example11@gmail.com" required>
+
+            <label for="login_pass">პაროლი</label>
+            <p>პაროლი უნდა შედგებოდეს უმცირესი ერთი ნომრისგან</p>
+            <p>! , . ? : ; ' " - ნიშნისგან</p>
+            <p>Uppercase "A" და Lowercase "a"</p>
+            <input type="password" name="password" id="login_pass" placeholder="ExaMple123!" required>
+            <button type="submit">Log In</button>
+        </form>
+    </body>
+</html>

@@ -1,10 +1,17 @@
 body {
-    background-color: rgb(121, 128, 129);
+    /*background-color: rgba(158, 156, 156, 0.586);*/
+    background-color: #919297;
 }
 
 h2 {
     text-align: center;
     font-size: 30px;
+}
+
+.book {
+  width: 300px;
+  height: auto;
+  border: 5px;
 }
 
 /* index.html button */
@@ -77,13 +84,20 @@ h2 {
     padding: 16px;
   }
   
-  /*form style
-  .formss {
-  }
 
-  .formss input {
+  input {
+    width: 20%;
+    background-color:#8d96a1;
+    color: white;
+    padding: 3px 5px;
+    margin: 4px 0;
+    border-radius: 2px;
   }
-  */
+  
+  input:hover {
+    background-color: #686666;
+  }
+  
 
   .submit_btn {
     font-size: 20px;
@@ -101,7 +115,7 @@ h2 {
   }
   
   .add {
-    background-color: #7a8596;
+    background-color: #818b99;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -139,5 +153,34 @@ h2 {
   }
 
   table, th, td { 
-    border: 1px solid #ccc; 
+    border: 1px solid #383535; 
+  }
+
+
+  .cancel_button {
+    color: rgb(86, 86, 189);
+    font-size: 18px;
+    background-color: rgba(185, 185, 185, 0.57);
+    padding: 6px 10px;
+    margin: 10px;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .verify_button {
+    color: rgb(147, 42, 42);
+    font-size: 18px;
+    background-color: rgba(185, 185, 185, 0.57);
+    padding: 6px 10px;
+    margin: 10px;
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .verify_button:hover {
+    background-color: #818181;
+  }
+
+  .cancel_button:hover {
+    background-color: #818181;
   }

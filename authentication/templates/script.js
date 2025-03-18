@@ -24,16 +24,24 @@ document.addEventListener("DOMContentLoaded", function () {
             const courseFormData = new FormData(courseForm);
             // course inputs
             courseData = {
+                group_name: courseFormData.get("group_name"),
                 classes: courseFormData.get("classes"),
                 nmb_students: courseFormData.get("nmb_students"),
         
-                monday: courseFormData.get("monday") ? courseFormData.get("monday_time") : '',
-                tuesday: courseFormData.get("tuesday") ? courseFormData.get("tuesday_time") : '',
-                wednesday: courseFormData.get("wednesday") ? courseFormData.get("wednesday_time") : '',
-                thursday: courseFormData.get("thursday") ? courseFormData.get("thursday_time") : '',
-                friday: courseFormData.get("friday") ? courseFormData.get("friday_time") : '',
-                saturday: courseFormData.get("saturday") ? courseFormData.get("saturday_time") : '',
-                sunday: courseFormData.get("sunday") ? courseFormData.get("sunday_time") : '',
+                monday: courseFormData.get("monday"),
+                monday_end: courseFormData.get("monday_end"),
+                tuesday: courseFormData.get("tuesday"),
+                tuesday_end: courseFormData.get("tuesday_end"),
+                wednesday: courseFormData.get("wednesday"),
+                wednesday_end: courseFormData.get("wednesday_end"),
+                thursday: courseFormData.get("thursday"),
+                thursday_end: courseFormData.get("thursday_end"),
+                friday: courseFormData.get("friday"),
+                friday_end: courseFormData.get("friday_end"),
+                saturday: courseFormData.get("saturday"),
+                saturday_end: courseFormData.get("saturday_end"),
+                sunday: courseFormData.get("sunday"),
+                sunday_end: courseFormData.get("sunday_end")
             };
         }
 
@@ -110,3 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
         generateStudentFields(count);
     });
 });
+    
+
+
