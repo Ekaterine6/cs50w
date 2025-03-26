@@ -1,6 +1,5 @@
 body {
-    /*background-color: rgba(158, 156, 156, 0.586);*/
-    background-color: #919297;
+    background-color: #51626d;
 }
 
 h2 {
@@ -8,11 +7,6 @@ h2 {
     font-size: 30px;
 }
 
-.book {
-  width: 300px;
-  height: auto;
-  border: 5px;
-}
 
 /* index.html button */
 .home_button{ 
@@ -125,37 +119,13 @@ h2 {
   }
 
   .add_course {
-    background-color: #7a8596;
+    background-color: #1d3557;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 1000px;
     margin: 50px;
     text-align: center;
   }
-
-  .student_rows {
-    font-size: 20px;
-    background-color: #111;
-    color: white;
-    padding: 10px 15px;
-    margin: 10px;
-    display: inline-block;
-    text-decoration: none;
-  }
-  .student_rows:hover {
-    background-color: #444;
-    color:aliceblue;
-  }
-
-  table {
-    border-collapse: collapse; 
-    width: 100%;
-  }
-
-  table, th, td { 
-    border: 1px solid #383535; 
-  }
-
 
   .cancel_button {
     color: rgb(86, 86, 189);
@@ -184,3 +154,42 @@ h2 {
   .cancel_button:hover {
     background-color: #818181;
   }
+
+  .book {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    top: 10%;
+    right: 10%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    animation-name: kay;
+    animation-timing-function: ease-in-out;
+    animation-play-state: running;
+    animation-delay: 1s;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes kay{
+  0%{
+
+  }
+  50%{
+    scale: 2;
+    transform: rotate(0);
+    border-radius: 0;
+  }
+  100%{
+    transform: none;
+    border-radius: 50%;
+    scale: 2;
+  }
+} 
+
+
+
+

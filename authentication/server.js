@@ -287,7 +287,7 @@ app.post('/start-verification', (req, res) => {
           req.session.userId = user.id;
           req.session.phone = recipientPhone;
           res.send({
-            message: 'Verification code sent.',
+            message: 'ვერიფიკაციის კოდი გაგზავნილია.',
             status: verification.status
           });
         })
