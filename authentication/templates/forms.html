@@ -5,25 +5,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/static/styles.css">
+
     </head>
     <body>
         <h2>ახალი კურსის დაწყება</h2>
         <div id="menu-container"></div> <!-- Placeholder for the menu -->
         <script src="/static/menu.js"></script>
         <!--new course-->
+        <!-- New course form -->
         <form class="add_course" id="course_form" action="submit-form" method="post">
             <h3>შეიყვანეთ კურსის ინფორმაცია</h3>
             <label for="group_name">ჯგუფის სახელი:</label><br>
             <input type="text" id="group_name" name="group_name" placeholder="ჯგუფის სახელი" required><br>
 
             <label for="classes">გაკვეთილების რაოდენობა:</label><br>
-            <input id="classes"name="classes" type="number" placeholder="00" required><br>
+            <input id="classes" name="classes" type="number" placeholder="00" required><br>
 
             <label for="nmb_students">სტუდენტების რაოდენობა:</label><br>
             <input id="nmb_students" name="nmb_students" type="number" placeholder="00" required><br>
 
             <label for="week">კვირის განრიგი:</label><br>
             <div id="week">
+
             <div class="formss">
                 <label for="monday">ორშაბათი - დაწყება</label>
                 <input type="time" id="monday" name="monday">
@@ -69,14 +72,20 @@
             </div>
             <button type="button" class="student_rows" id="student_rows">შექმნა</button>
         </form>
+        
+<!-- Hidden student form (Initially hidden) -->
+<div id="student_form_popup" class="student_form_popup">
+    <form class="add" id="Form" action="/submit-form" method="post">
+        <h3>სტუდენტის ინფორმაცია</h3>
+        <div id="students_container" class="formss">
+            <!-- Dynamic student fields will appear here -->
+        </div>            
+        <input id="submit-btn" name="submit-btn" class="submit_btn" type="submit" value="დამატება">
+    </form>
+    <button type="button" id="close_student_form" class="close_student_form">დახურვა</button>
+</div>
 
-        <!--adding the students-->
-        <form class="add" id="Form" action="/submit-form" method="post">
-            <h3>სტუდენტის ინფორმაცია</h3>
-            <div id="students_container" class="formss">
-            </div>
-            <input id="submit-btn" name="submit-btn" class="submit_btn" type="submit" value="დამატება">
-        </form>
-        <script src="/templates/script.js"></script>
+<script src="/templates/script.js"></script>
+        
     </body>
 </html>

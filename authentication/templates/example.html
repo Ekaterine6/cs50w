@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Focus Effect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1d3557, #457b9d);
+            overflow: hidden;
+            transition: filter 0.3s ease-in-out;
+        }
+
+        /* Overlay to darken background when popup is active */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 4;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Hidden popup box */
+        .message-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            text-align: center;
+            background: #457b9d;
+            border-radius: 25px;
+            padding: 25px;
+            width: 350px;
+            height: auto;
+            transition: 
+                transform 0.3s ease-in-out, 
+                opacity 0.3s ease-in-out, 
+                width 0.3s ease-in-out, 
+                height 0.3s ease-in-out;
+            box-shadow: 0 0 30px rgba(241, 250, 238, 0.0);
+            z-index: 5;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Expanding effect for focus */
+        .message-container.active {
+            box-shadow: 0 0 30px rgba(241, 250, 238, 0.9);
+            transform: translate(-50%, -55%) scale(1);
+            width: 420px;
+            height: 500px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .exit-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            color: #f1faee;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .exit-button:hover {
+            transform: scale(1.2);
+            color: #a8dadc;
+        }
+
+        .message-label {
+            color: #f1faee;
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        #checkboxesContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-label {
+            cursor: pointer;
+            font-size: 16px;
+            color: #f1faee;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .checkbox-container input {
+            transform: scale(1.3);
+        }
+
+        /* Buttons */
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #457b9d;
+            background: #f1faee;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: #a8dadc;
+            transform: scale(1.05);
+        }
+
+        /* Hide submit button when popup is active */
+        .hidden {
+            display: none;
+        }
+
+        /* Inside popup submit button */
+        .popup-submit-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #f1faee;
+            background: #1d3557;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .popup-submit-btn:hover {
+            background: #a8dadc;
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Hidden popup message container -->
+    <div class="message-container" id="messageBox">
+        <button class="exit-button" onclick="hidePopup()">&times;</button>
+        <label class="message-label">Select your options:</label>
+
+        <div id="checkboxesContainer">
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox1">
+                <label for="checkbox1">John Doe</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox2">
+                <label for="checkbox2">Jane Smith</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox3">
+                <label for="checkbox3">Mark Johnson</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox4">
+                <label for="checkbox4">Emily Davis</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox5">
+                <label for="checkbox5">Michael Wilson</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox6">
+                <label for="checkbox6">Olivia Brown</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox7">
+                <label for="checkbox7">James Anderson</label>
+            </div>
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox8">
+                <label for="checkbox8">Sophia Martinez</label>
+            </div>
+        </div>
+
+        <!-- New Submit Button inside Popup -->
+        <button type="submit" class="popup-submit-btn">Submit</button>
+    </div>
+
+    <!-- Submit button (triggers popup) -->
+    <button type="submit" class="submit-btn" id="submitBtn" onclick="showPopup()">login</button>
+
+    <script>
+        function showPopup() {
+            document.getElementById("messageBox").classList.add("active");
+            document.getElementById("overlay").classList.add("active");
+            document.getElementById("submitBtn").classList.add("hidden");
+        }
+
+        function hidePopup() {
+            document.getElementById("messageBox").classList.remove("active");
+            document.getElementById("overlay").classList.remove("active");
+            document.getElementById("submitBtn").classList.remove("hidden");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,15 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Student Form Submission Handler
+    // Get form and button elements
     const studentForm = document.getElementById("Form");
+    const studentRowsButton = document.getElementById("student_rows");
+    const studentFormPopup = document.getElementById("student_form_popup");
+    const closeStudentFormButton = document.getElementById("close_student_form");
+    const studentsContainer = document.getElementById("students_container");
+    const nmbStudentsInput = document.getElementById("nmb_students");
 
+    // Student Form Submission Handler
     studentForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        // Collect dynamic student objects from the students container.
+        // Collect dynamic student objects from the students container
         const studentContainers = document.querySelectorAll("#students_container .student");
         let students = [];
+
         studentContainers.forEach((container, index) => {
-            // Using index+1 to match generated field names
             const name = container.querySelector(`input[name="students[${index + 1}][name]"]`).value;
             const surname = container.querySelector(`input[name="students[${index + 1}][surname]"]`).value;
             const email = container.querySelector(`input[name="students[${index + 1}][email]"]`).value;
@@ -17,107 +23,108 @@ document.addEventListener("DOMContentLoaded", function () {
             students.push({ name, surname, email, phone });
         });
 
-        //getting course data if there is any
+        // Collect course data
         const courseForm = document.getElementById("course_form");
-        let courseData = {};
-        if (courseForm) {
-            const courseFormData = new FormData(courseForm);
-            // course inputs
-            courseData = {
-                group_name: courseFormData.get("group_name"),
-                classes: courseFormData.get("classes"),
-                nmb_students: courseFormData.get("nmb_students"),
-        
-                monday: courseFormData.get("monday"),
-                monday_end: courseFormData.get("monday_end"),
-                tuesday: courseFormData.get("tuesday"),
-                tuesday_end: courseFormData.get("tuesday_end"),
-                wednesday: courseFormData.get("wednesday"),
-                wednesday_end: courseFormData.get("wednesday_end"),
-                thursday: courseFormData.get("thursday"),
-                thursday_end: courseFormData.get("thursday_end"),
-                friday: courseFormData.get("friday"),
-                friday_end: courseFormData.get("friday_end"),
-                saturday: courseFormData.get("saturday"),
-                saturday_end: courseFormData.get("saturday_end"),
-                sunday: courseFormData.get("sunday"),
-                sunday_end: courseFormData.get("sunday_end")
-            };
-        }
-
-        //final payload combining course and student info
-        const payload = {
-            students,
-            ...courseData
+        const courseFormData = new FormData(courseForm);
+        const courseData = {
+            group_name: courseFormData.get("group_name"),
+            classes: courseFormData.get("classes"),
+            nmb_students: courseFormData.get("nmb_students"),
+            monday: courseFormData.get("monday"),
+            monday_end: courseFormData.get("monday_end"),
+            tuesday: courseFormData.get("tuesday"),
+            tuesday_end: courseFormData.get("tuesday_end"),
+            wednesday: courseFormData.get("wednesday"),
+            wednesday_end: courseFormData.get("wednesday_end"),
+            thursday: courseFormData.get("thursday"),
+            thursday_end: courseFormData.get("thursday_end"),
+            friday: courseFormData.get("friday"),
+            friday_end: courseFormData.get("friday_end"),
+            saturday: courseFormData.get("saturday"),
+            saturday_end: courseFormData.get("saturday_end"),
+            sunday: courseFormData.get("sunday"),
+            sunday_end: courseFormData.get("sunday_end"),
         };
 
-        console.log("Submitting the following payload:");
-        console.log(payload);
+        // Final payload combining course and student info
+        const payload = { students, ...courseData };
 
-        fetch("/submit-form", {
-            method: "POST",
-            body: JSON.stringify(payload),
+        fetch(studentForm.action, {
+            method: studentForm.method,
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify(payload)
         })
-        .then((response) => response.text())
-        .then((data) => {
+        .then(response => response.json())
+        .then(data => {
             console.log("Server response:", data);
-            alert("სტუდენტები და კურსის ინფორმაცია დამატებულია");
+            alert("ფორმა წარმატებით გაიგზავნა!");
+            studentFormPopup.style.display = 'none'; // Hide the form on success
         })
-        .catch((error) => {
-            console.error("Error:", error);
+        .catch(error => {
+            console.error("Error submitting form:", error);
+            alert("შეცდომა მოხდა. გთხოვთ, სცადოთ თავიდან.");
         });
     });
 
-    // Dynamic Student Fields Generation
-    const nmbStudentsInput = document.getElementById("nmb_students");
-    const generateStudentsButton = document.getElementById("student_rows");
-    const studentsContainer = document.getElementById("students_container");
+    // Function to generate the student table dynamically
+    function generateStudentTable(count) {
+        studentsContainer.innerHTML = ""; // Clear previous content
 
-    // Function create student input
-    function generateStudentFields(count) {
-        // Clear
-        studentsContainer.innerHTML = "";
+        const table = document.createElement("table");
+        table.classList.add("student-table");
+
+        const thead = document.createElement("thead");
+        thead.innerHTML = `
+            <tr>
+                <th>#</th>
+                <th>სახელი</th>
+                <th>გვარი</th>
+                <th>Email</th>
+                <th>მობილური ნომერი</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
 
         for (let i = 1; i <= count; i++) {
-            // Create a container div for each student.
-            const studentDiv = document.createElement("div");
-            studentDiv.classList.add("student");
-            studentDiv.innerHTML = `
-                <h4>სტუდენტი ${i}</h4>
-                <div class="formss">
-                    <label for="name_${i}">სახელი:</label><br>
-                    <input id="name_${i}" name="students[${i}][name]" type="text" placeholder="სახელი" required><br>
-                </div>
-                <div class="formss">
-                    <label for="surname_${i}">გვარი:</label><br>
-                    <input id="surname_${i}" name="students[${i}][surname]" type="text" placeholder="გვარი" required><br>
-                </div>
-                <div class="formss">
-                    <label for="email_${i}">Email:</label><br>
-                    <input id="email_${i}" name="students[${i}][email]" type="email" placeholder="email@gmail.com" required><br>
-                </div>
-                <div class="formss">
-                    <label for="phone_${i}">მობილური ნომერი:</label><br>
-                    <input id="phone_${i}" name="students[${i}][phone]" type="tel" placeholder="000 00 00 00" required><br>
-                </div>
+            const row = document.createElement("tr");
+            row.classList.add("student");
+
+            row.innerHTML = `
+                <td>${i}</td>
+                <td><input type="text" name="students[${i}][name]" placeholder="სახელი" required></td>
+                <td><input type="text" name="students[${i}][surname]" placeholder="გვარი" required></td>
+                <td><input type="email" name="students[${i}][email]" placeholder="email@gmail.com" required></td>
+                <td><input type="tel" name="students[${i}][phone]" placeholder="000 00 00 00" required></td>
             `;
-            studentsContainer.appendChild(studentDiv);
+            tbody.appendChild(row);
         }
+
+        table.appendChild(tbody);
+        studentsContainer.appendChild(table);
     }
 
-    // Generate dynamic fields when the button is clicked.
-    generateStudentsButton.addEventListener("click", function () {
+    // Show student form popup when button is clicked
+    studentRowsButton.addEventListener("click", function () {
         const count = parseInt(nmbStudentsInput.value, 10);
         if (isNaN(count) || count < 1) {
             alert("გთხოვთ შეიყვანოთ სწორი სტუდენტების რაოდენობა");
-            return res.redirect('/templates/error.html');
+            return;
         }
-        generateStudentFields(count);
+
+        // Show student form with fade-in animation
+        studentFormPopup.style.display = 'block';
+        setTimeout(() => studentFormPopup.classList.add('show'), 10);
+
+        generateStudentTable(count); // Generate student table
+    });
+
+    // Close student form popup when close button is clicked
+    closeStudentFormButton.addEventListener("click", function () {
+        studentFormPopup.classList.remove('show');
+        setTimeout(() => studentFormPopup.style.display = 'none', 500);
     });
 });
-    
-
-

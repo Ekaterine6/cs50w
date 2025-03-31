@@ -6,9 +6,45 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-        th, td { padding: 8px; text-align: left;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
         }
 
+        h2 {
+            color: #333;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3b6096;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e3e3e3;
+            transition: 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -35,27 +71,27 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-    fetch('/fetch-courses-data')
-        .then(response => response.json())
-        .then(data => {
-            const tbody = document.getElementById("courses-tbody");
-            data.forEach(course => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${course.group_name}</td>
-                    <td>${course.monday} - ${course.monday_end}</td>
-                    <td>${course.tuesday} - ${course.tuesday_end}</td>
-                    <td>${course.wednesday} - ${course.wednesday_end}</td>
-                    <td>${course.thursday} - ${course.thursday_end}</td>
-                    <td>${course.friday} - ${course.friday_end}</td>
-                    <td>${course.saturday} - ${course.saturday_end}</td>
-                    <td>${course.sunday} - ${course.sunday_end}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error, unable to get students:', error));
-        });
+          fetch('/fetch-courses-data')
+              .then(response => response.json())
+              .then(data => {
+                  const tbody = document.getElementById("courses-tbody");
+                  data.forEach(course => {
+                      const row = document.createElement('tr');
+                      row.innerHTML = `
+                          <td>${course.group_name}</td>
+                          <td>${course.monday} - ${course.monday_end}</td>
+                          <td>${course.tuesday} - ${course.tuesday_end}</td>
+                          <td>${course.wednesday} - ${course.wednesday_end}</td>
+                          <td>${course.thursday} - ${course.thursday_end}</td>
+                          <td>${course.friday} - ${course.friday_end}</td>
+                          <td>${course.saturday} - ${course.saturday_end}</td>
+                          <td>${course.sunday} - ${course.sunday_end}</td>
+                      `;
+                      tbody.appendChild(row);
+                  });
+              })
+              .catch(error => console.error('Error, unable to get students:', error));
+      });
     </script>
 </body>
 </html>
