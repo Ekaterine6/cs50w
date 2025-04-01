@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const path = require('path');
 const session = require('express-session');
 require('dotenv').config();
@@ -18,28 +18,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
-
-//keeping users logged in
+// Keeping users logged in
 app.use(session({
     secret: 'your_session_secret',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true } // Change secure to true if using HTTPS
-  }));
+}));
 
-// MySQL connection configuration
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'ekaterine',
-    password: 'Ekaa1616.',
-    database: 'authentication_database'
+  host: process.env.DB_HOST || 'localhost',  // fallback to 'localhost' if DB_HOST isn't defined
+  user: process.env.DB_USER || 'ekaterine',  // fallback to 'ekaterine' if DB_USER isn't defined
+  password: process.env.DB_PASSWORD || 'Ekaa1616.',  // fallback password
+  database: process.env.DB_NAME || 'authentication_database'  // fallback to default DB name
 });
+
+console.log(process.env.DB_USER, process.env.DB_PASSWORD, process.env.DB_HOST, process.env.DB_NAME);
+
 
 db.connect((err) => {
     if (err) throw err;
     console.log('Connected to database');
 });
 
+// Your routes and logic go here...
+
+
+// deleted in word
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -347,9 +352,8 @@ app.post('/start-verification', (req, res) => {
 });
   
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-    
+const PORT = process.env.PORT || 10000;  // Ensure you're using process.env.PORT for Render to map the port
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
