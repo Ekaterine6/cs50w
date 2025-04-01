@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const path = require('path');
 const session = require('express-session');
 require('dotenv').config();
@@ -26,15 +26,13 @@ app.use(session({
     cookie: { secure: true } // Change secure to true if using HTTPS
 }));
 
+// MySQL connection configuration for InfinityFree
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',  // fallback to 'localhost' if DB_HOST isn't defined
-  user: process.env.DB_USER || 'ekaterine',  // fallback to 'ekaterine' if DB_USER isn't defined
-  password: process.env.DB_PASSWORD || 'Ekaa1616.',  // fallback password
-  database: process.env.DB_NAME || 'authentication_database'  // fallback to default DB name
+    host: 'sql112.infinityfree.com', // Use the InfinityFree MySQL hostname
+    user: 'if0_38652717',            // Replace with your MySQL username
+    password: 'fIbMASv0TZk',  // Replace with your MySQL password
+    database: 'if0_38652717_XXX'     // Replace with your MySQL database name
 });
-
-console.log(process.env.DB_USER, process.env.DB_PASSWORD, process.env.DB_HOST, process.env.DB_NAME);
-
 
 db.connect((err) => {
     if (err) throw err;
