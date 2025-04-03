@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <a href="/templates/lists.html">განრიგი</a>
             <a href="/templates/students.html">ინფორმაცია</a>
             <a href="/templates/settings.html">Settings</a>
-            <a href="/templates/example.html">Example</a>
         </div>
         <div id="menubtn">
             <button class="openbtn" id="openBtn">MENU</button>
