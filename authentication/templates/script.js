@@ -51,21 +51,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fetch(studentForm.action, {
             method: studentForm.method,
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Server response:", data);
-            alert("ფორმა წარმატებით გაიგზავნა!");
-            studentFormPopup.style.display = 'none'; // Hide the form on success
+        .then(response => {
+            console.log("Response status:", response.status);
+            return response.text();  // Get raw response
         })
-        .catch(error => {
-            console.error("Error submitting form:", error);
-            alert("შეცდომა მოხდა. გთხოვთ, სცადოთ თავიდან.");
-        });
+        .then(text => {
+            console.log("Raw response:", text);
+            try {
+                const data = JSON.parse(text);
+                console.log("Parsed JSON:", data);
+            } catch (error) {
+                console.error("JSON parse error:", error);
+            }
+        })
+        .catch(error => console.error("Error submitting form:", error));
     });
 
     // Function to generate the student table dynamically

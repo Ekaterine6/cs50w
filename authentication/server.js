@@ -14,6 +14,10 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.json());
+// If you support form-urlencoded data:
+app.use(express.urlencoded({ extended: true }));
+
 // Serve static files and templates
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/templates', express.static(path.join(__dirname, 'templates')));
@@ -26,12 +30,12 @@ app.use(session({
     cookie: { secure: true } // Change secure to true if using HTTPS
 }));
 
-// MySQL connection configuration for InfinityFree
+// MySQL connection configuration
 const db = mysql.createConnection({
-    host: 'sql112.infinityfree.com', // Use the InfinityFree MySQL hostname
-    user: 'if0_38652717',            // Replace with your MySQL username
-    password: 'fIbMASv0TZk',  // Replace with your MySQL password
-    database: 'if0_38652717_XXX'     // Replace with your MySQL database name
+  host: 'localhost',
+  user: 'ekaterine',
+  password: 'Ekaa1616.',
+  database: 'authentication_database'
 });
 
 db.connect((err) => {

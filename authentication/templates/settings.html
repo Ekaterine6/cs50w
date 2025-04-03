@@ -1,107 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>settings</title>
+    <title>Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-        th, td { padding: 8px; text-align: left; }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle, #1E3A8A, #3B82F6, #b0d0f8);
+            overflow: hidden;
+            text-align: center; /* Center align all text */
+        }
+        h2 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 20px; /* Space below the heading */
+        }
+        .message-container {
+            position: relative; /* Enables positioning inside the container */
+            text-align: center;
+            background: #457b9d;
+            border-radius: 25px;
+            padding: 25px;
+            width: 350px;
+            box-shadow: 0 0 20px rgba(241, 250, 238, 0.6); /* Soft glow effect */
+            animation: bounce 1s infinite alternate ease-in-out;
+        }
+
+        .hidden { 
+            display: none; 
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .submit-btn {
+            border: none;
+            background-color: #007bff;
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #eef3f6;
+            width: 15%;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .reset-btn{
+            border: none;
+            background-color: #007bff;
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #eef3f6;
+            width: 15%;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #resetPasswordPopup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 350px;
+        }
+
+        .popup-content {
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .security-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .cancel_button {
+            background-color: red;
+        }
     </style>
 </head>
 <body>
-    <h2>კურსის ისტორიის წაშლა</h2>
+    <!-- Course History Deletion Section -->
     <div id="menu-container"></div> <!-- Placeholder for the menu -->
     <script src="/static/menu.js"></script>
-    
-    <button class="home_button" id="delete">წაშლა</button>
-    <div id="securityQuestionModal" style="display:none">
+
+    <button class="submit-btn" id="delete">წაშლა</button>
+
+    <!-- Security Question Modal -->
+    <div id="securityQuestionModal" class="hidden">
         <h2 id="securityQuestion">მასწავლებლის წაშლის უფლებების დასამტკიცებელი კოდი</h2>
         <input type="text" id="securityAnswer" placeholder="კოდი"><br>
         <button id="verifyAnswer" class="verify_button">წაშლა</button>
         <button id="cancel" class="cancel_button">გაუქმება</button>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    <!-- Reset Password Button -->
+    <button id="openResetPopup" class="reset-btn">პაროლის აღდგენა</button>
+
+    <!-- Password Reset Popup (Hidden by Default) -->
+    <div id="resetPasswordPopup" class="hidden">
+        <div class="popup-content">
+            <span id="closePopup" class="close-btn">&times;</span>
             
-            const deleteButton = document.getElementById("delete");
-            const securityQuestionModal = document.getElementById("securityQuestionModal");
-            const securityQuestionText = document.getElementById("securityQuestion");
-            const securityAnswerInput = document.getElementById("securityAnswer");
-            const verifyAnswerButton = document.getElementById("verifyAnswer");
-            const cancelButton = document.getElementById("cancel");
+            <!-- Reset Password Section -->
+            <div class="message-container">
+                <div class="icon">🔑</div>
+                <h2>პაროლის განახლება SMS ვერიფიკაციით</h2>
+                <form id="startVerificationForm">
+                    <h3>ვერიფიკაციის კოდის მოთხოვნა</h3>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="შეიყვანეთ Email" required />
 
-            const securityQuestion = "მასწავლებლის ვერიფიკაციის კოდი: ";
-            const correctAnswer = "მასწ11";
+                    <label for="phone">ტელეფონი (+995XXXXXXXX):</label>
+                    <input type="text" id="phone" name="phone" placeholder="+995XXXXXXXX" required />
 
-            deleteButton.addEventListener("click", function() {
-                securityQuestionText.textContent = securityQuestion;
-                securityQuestionModal.style.display = "block";
-            });
+                    <button class="submit-btn" type="submit">ვერიფიკაციის კოდის მიღება</button>
+                </form>
 
-            verifyAnswerButton.addEventListener("click", function() {
-                const userAnswer = securityAnswerInput.value.trim();
-                if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-                    fetch("/delete-course-history", {
-                        method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert("კურსის ისტორია წაშლილია.");
-                        } else {
-                            alert("წაშლის პროცესში პრობლემა აღმოჩნდა.");
-                        }
-                        securityQuestionModal.style.display = "none";
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("ისტორიის წაშლა არ განხორციელდა.");
-                        securityQuestionModal.style.display = "none";
-                    });
-                } else {
-                    alert("არასწორი ვერიფიკაციის კოდი.");
-                }
-            });
+                <!-- Form to verify the code and reset the password -->
+                <form id="checkVerificationForm" class="hidden">
+                    <h3>დაადასტურე კოდი და გაანახლე პაროლი</h3>
+                    <label for="code">ვერიფიკაციის კოდი:</label>
+                    <input type="text" id="code" name="code" placeholder="000000" required />
 
-            cancelButton.addEventListener("click", function() {
-                securityQuestionModal.style.display = "none";
+                    <label for="newPassword">ახალი პაროლი:</label>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Abcd123!" required />
+
+                    <button class="submit-btn" type="submit">პაროლის განახლება</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password reset functionality
+        document.getElementById("openResetPopup").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.getElementById("resetPasswordPopup").classList.remove("hidden");
+        });
+
+        document.getElementById("closePopup").addEventListener("click", function() {
+            document.getElementById("resetPasswordPopup").classList.add("hidden");
+        });
+
+        // Handle the start verification form submission
+        document.getElementById("startVerificationForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = new URLSearchParams(formData);
+            
+            fetch("/start-verification", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: data
+            })
+            .then(response => {
+                if (!response.ok) return response.text().then(text => { throw new Error(text) });
+                return response.json();
+            })
+            .then(result => {
+                alert(result.message);
+                document.getElementById("startVerificationForm").classList.add("hidden");
+                document.getElementById("checkVerificationForm").classList.remove("hidden");
+            })
+            .catch(error => {
+                console.error("Error starting verification:", error);
+                alert("Error: " + error.message);
             });
         });
+
+        // Handle the check verification form submission
+        document.getElementById("checkVerificationForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = new URLSearchParams(formData);
+            
+            fetch("/check-verification", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: data
+            })
+            .then(response => {
+                if (!response.ok) return response.text().then(text => { throw new Error(text) });
+                return response.text();
+            })
+            .then(result => {
+                alert(result);
+            })
+            .catch(error => {
+                console.error("Error verifying code:", error);
+                alert("Error: " + error.message);
+            });
+        });
+
+        // Handle the delete history functionality
+        document.getElementById("delete").addEventListener("click", function() {
+            document.getElementById("securityQuestionModal").classList.remove("hidden");
+        });
+
+        document.getElementById("cancel").addEventListener("click", function() {
+            document.getElementById("securityQuestionModal").classList.add("hidden");
+        });
+
+        document.getElementById("verifyAnswer").addEventListener("click", function() {
+            const securityAnswer = document.getElementById("securityAnswer").value.trim();
+            const correctAnswer = "მასწ11"; // Correct answer for verification
+            
+            if (securityAnswer === correctAnswer) {
+                fetch("/delete-course-history", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("კურსის ისტორია წაშლილია.");
+                    } else {
+                        alert("წაშლის პროცესში პრობლემა აღმოჩნდა.");
+                    }
+                    document.getElementById("securityQuestionModal").classList.add("hidden");
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("ისტორიის წაშლა არ განხორციელდა.");
+                    document.getElementById("securityQuestionModal").classList.add("hidden");
+                });
+            } else {
+                alert("არასწორი ვერიფიკაციის კოდი.");
+            }
+        });
     </script>
-
-<button id="resetPasswordBtn" class="reset-btn">პაროლის აღდგენა</button>
-
-<script>
-    document.getElementById("resetPasswordBtn").addEventListener("click", function() {
-        window.location.href = "reset-password.html";
-    });
-</script>
-
-<style>
-    .reset-btn {
-        display: block;
-        margin: 20px auto;
-        padding: 12px 20px;
-        font-size: 16px;
-        color: #fff;
-        background: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-    .reset-btn:hover {
-        background: #0056b3;
-        transform: scale(1.05);
-    }
-</style>
-
-
 </body>
 </html>
