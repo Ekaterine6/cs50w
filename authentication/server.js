@@ -141,23 +141,24 @@ app.post('/submit-course-form', (req, res) => {
 });
 
 // Separate route for submitting student data
+// Example backend route for student submission
+
 app.post('/submit-student-form', (req, res) => {
-    const { course_id, name, surname, email, phone } = req.body;
+    const students = req.body.students;
 
-    const studentSql = `
-        INSERT INTO students (course_id, name, surname, email, phone)
-        VALUES (?, ?, ?, ?, ?)
-    `;
-
-    db.query(studentSql, [course_id, name, surname, email, phone], (studentErr) => {
-        if (studentErr) {
-            console.error('Error inserting student:', studentErr);
-            return res.redirect('/templates/error.html');
-        }
-
-        // Respond or redirect after successful student insertion.
-        res.redirect('/templates/lists.html');
+    students.forEach((student) => {
+        const query = `INSERT INTO students (name, surname, email, phone) VALUES (?, ?, ?, ?)`;
+        db.query(query, [student.name, student.surname, student.email, student.phone], (err, result) => {
+            if (err) {
+                console.error('Error inserting student:', err);
+                res.status(500).json({ error: 'There was an error adding students' });
+            } else {
+                console.log('Student added:', result);
+            }
+        });
     });
+
+    res.status(200).json({ message: 'Students added successfully' });
 });
 
 // Route to fetch courses and students (no changes)

@@ -7,6 +7,49 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
     <style>
+        /* Custom styles for the form */
+        .students-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        .student {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            border-color: #3B82F6;
+            outline: none;
+        }
+
         .submit-btn {
             margin-top: 15px;
             padding: 10px 20px;
@@ -17,40 +60,50 @@
             border-radius: 20px;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.2s ease;
+            max-width: 200px; /* Set a max-width for the button */
+            display: block; /* Centers the button */
+            margin-left: auto; /* Centers the button */
+            margin-right: auto; /* Centers the button */
         }
 
         .submit-btn:hover {
             background: #a8dadc;
             transform: scale(1.05);
         }
+
+        .submit-btn:active {
+            background: #a8dadc;
+        }
     </style>
 </head>
 
 <body>
-    <h2>სტუდენტების დამატება</h2>
-    <div id="menu-container"></div> <!-- Placeholder for the menu -->
-    <script src="/static/menu.js"></script>
+    <div>
+        <h2>სტუდენტების დამატება</h2>
+        <div id="menu-container"></div> <!-- Placeholder for the menu -->
+        <script src="/static/menu.js"></script>
 
-    <!-- Student Form -->
-    <form id="student_form" action="/submit-student-form" method="post">
-        <div id="students_container" class="students-container">
-            <div class="student">
-                <label>სახელი:</label>
-                <input type="text" name="students[0][name]" required><br>
+        <!-- Student Form -->
+        <form id="student_form" action="/submit-student-form" method="post">
+            <div id="students_container" class="students-container">
+                <div class="student">
+                    <label>სახელი:</label>
+                    <input type="text" name="students[0][name]" required placeholder="სახელი"><br>
 
-                <label>გვარი:</label>
-                <input type="text" name="students[0][surname]" required><br>
+                    <label>გვარი:</label>
+                    <input type="text" name="students[0][surname]" required placeholder="გვარი"><br>
 
-                <label>Email:</label>
-                <input type="email" name="students[0][email]" required><br>
+                    <label>Email:</label>
+                    <input type="email" name="students[0][email]" required placeholder="email"><br>
 
-                <label>მობილური ნომერი:</label>
-                <input type="tel" name="students[0][phone]" required><br>
+                    <label>მობილური ნომერი:</label>
+                    <input type="tel" name="students[0][phone]" required placeholder="+995 000 00 00 00"><br>
+                </div>
             </div>
-        </div>
 
-        <button type="submit" value="დამატება" class="submit-btn">add</button>
-    </form>
+            <button type="submit" value="დამატება" class="submit-btn">დამატება</button>
+        </form>
+    </div>
 
     <!-- Include your custom script -->
     <script src="script.js" defer></script>
