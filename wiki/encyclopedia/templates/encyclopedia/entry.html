@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block body %}
-<p>{{ entry }}</p>
+{{ entry }}
+<button><a href="{% url 'edit_entry' title %}">edit</a></button>
 {% endblock %}
 
 

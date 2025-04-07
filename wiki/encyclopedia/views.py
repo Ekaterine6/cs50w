@@ -64,3 +64,18 @@ def create_entry(request):
             "content": content
         })
     return render(request, "encyclopedia/create_entry.html")
+
+
+def edit_entry(request, title):
+    entry = util.get_entry(title)
+
+    if request.method == "POST":
+        changed_entry = request.POST.get("entry", "")
+
+        util.save_entry(title, changed_entry)
+        return render(request, "entry", title=title)
+
+    return render(request, "encyclopedia/entry.html", {
+        "title": title,
+        "entry": entry if entry else "" 
+    })
