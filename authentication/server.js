@@ -45,8 +45,7 @@ db.connect((err) => {
 
 // Your routes and logic go here...
 
-
-// deleted in word
+// Login route (no changes)
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -84,11 +83,10 @@ app.get('/', (req, res) => {
     }
 });
 
-  
-
-app.post('/submit-form', (req, res) => {
+// Separate route for submitting course data
+app.post('/submit-course-form', (req, res) => {
     const {
-        group_name,  // <-- new column for the group name, now at the beginning
+        group_name,
         classes,
         nmb_students,
         monday,
@@ -105,7 +103,6 @@ app.post('/submit-form', (req, res) => {
         saturday_end,
         sunday,
         sunday_end,
-        students
     } = req.body;
 
     const courseSql = `
@@ -137,38 +134,33 @@ app.post('/submit-form', (req, res) => {
             console.error('Error inserting course:', courseErr);
             return res.redirect('/templates/error.html');
         }
-
-        // Retrieve the inserted course id.
-        const courseId = courseResult.insertId;
-
-        if (Array.isArray(students) && students.length > 0) {
-            const studentSql = `
-                INSERT INTO students (course_id, name, surname, email, phone)
-                VALUES ?
-            `;
-            const studentValues = students.map(student => [
-                courseId,
-                student.name,
-                student.surname,
-                student.email,
-                student.phone
-            ]);
-            db.query(studentSql, [studentValues], (studentErr, studentResult) => {
-                if (studentErr) {
-                    console.error('Error inserting students:', studentErr);
-                    return res.redirect('/templates/error.html');
-                }
-                // Redirect or send a success response.
-                res.redirect('/templates/lists.html');
-            });
-        } else {
-            // If no students provided, complete the request.
-            res.redirect('/templates/lists.html');
-        }
+        
+        // Redirect or respond after successful course creation.
+        res.redirect('/templates/lists.html');
     });
 });
 
+// Separate route for submitting student data
+app.post('/submit-student-form', (req, res) => {
+    const { course_id, name, surname, email, phone } = req.body;
 
+    const studentSql = `
+        INSERT INTO students (course_id, name, surname, email, phone)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(studentSql, [course_id, name, surname, email, phone], (studentErr) => {
+        if (studentErr) {
+            console.error('Error inserting student:', studentErr);
+            return res.redirect('/templates/error.html');
+        }
+
+        // Respond or redirect after successful student insertion.
+        res.redirect('/templates/lists.html');
+    });
+});
+
+// Route to fetch courses and students (no changes)
 app.get('/fetch-courses-data', (req, res) => {
     const sql = `
         SELECT c.id AS course_id,
@@ -208,16 +200,17 @@ app.get('/fetch-courses-data', (req, res) => {
 });
 
 
+// Serve the index page (no changes)
 app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Serve error page (no changes)
 app.get('/error.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'error.html'));
 });
 
-
-//  delete course history
+// Delete course and student history (no changes)
 app.delete('/delete-course-history', (req, res) => {
     const deleteCoursesSql = 'DELETE FROM courses';
     const deleteStudentsSql = 'DELETE FROM students';
@@ -239,123 +232,117 @@ app.delete('/delete-course-history', (req, res) => {
     });
 });
 
-
-// Endpoint for starting a verification
+// Endpoint for starting a verification (no changes)
 app.post('/start-verification', (req, res) => {
     const { email, phone } = req.body;
-  
+
     // Look up user by email to optionally use the stored phone if needed.
     const query = 'SELECT id, phone FROM users WHERE email = ?';
     db.query(query, [email], (err, results) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).send('Database error.');
-      }
-      if (results.length === 0) return res.status(404).send('User not found.');
-  
-      const user = results[0];
-      
-      // Safely convert the provided phone and the stored phone to strings and trim them.
-      const providedPhone = phone ? String(phone).trim() : "";
-      const storedPhone = user.phone ? String(user.phone).trim() : "";
-      let recipientPhone = providedPhone || storedPhone;
-      
-      if (!recipientPhone) {
-        return res.status(400).send('No valid phone number provided.');
-      }
-  
-      // Ensure the provided phone is not the same as your Twilio sending number.
-      const twilioNumber = process.env.TWILIO_PHONE_NUMBER ? String(process.env.TWILIO_PHONE_NUMBER).trim() : "";
-      if (recipientPhone === twilioNumber) {
-        return res.status(400).send("The provided phone number cannot be the sender's number. Please provide a different phone number.");
-      }
-      
-      // Optionally update the user's phone number if a new one is provided.
-      if (providedPhone && providedPhone !== storedPhone) {
-        const updateQuery = 'UPDATE users SET phone = ? WHERE id = ?';
-        db.query(updateQuery, [recipientPhone, user.id], (updateErr) => {
-          if (updateErr) {
-            console.error('Error updating phone number:', updateErr);
-            // Continue even if updating fails.
-          }
-        });
-      }
-      
-      // Start the verification using Twilio Verify.
-      client.verify.services(process.env.TWILIO_VERIFY_SERVICE_SID)
-        .verifications
-        .create({
-          to: recipientPhone,
-          channel: 'sms'
-        })
-        .then(verification => {
-          console.log('Verification started:', verification.sid);
-          // Store the user ID and phone in session for later reference.
-          req.session.userId = user.id;
-          req.session.phone = recipientPhone;
-          res.send({
-            message: 'ვერიფიკაციის კოდი გაგზავნილია.',
-            status: verification.status
-          });
-        })
-        .catch(error => {
-          console.error('Error starting verification:', error);
-          res.status(500).send('Error starting verification.');
-        });
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).send('Database error.');
+        }
+        if (results.length === 0) return res.status(404).send('User not found.');
+
+        const user = results[0];
+        
+        // Safely convert the provided phone and the stored phone to strings and trim them.
+        const providedPhone = phone ? String(phone).trim() : "";
+        const storedPhone = user.phone ? String(user.phone).trim() : "";
+        let recipientPhone = providedPhone || storedPhone;
+        
+        if (!recipientPhone) {
+            return res.status(400).send('No valid phone number provided.');
+        }
+
+        // Ensure the provided phone is not the same as your Twilio sending number.
+        const twilioNumber = process.env.TWILIO_PHONE_NUMBER ? String(process.env.TWILIO_PHONE_NUMBER).trim() : "";
+        if (recipientPhone === twilioNumber) {
+            return res.status(400).send("The provided phone number cannot be the sender's number. Please provide a different phone number.");
+        }
+        
+        // Optionally update the user's phone number if a new one is provided.
+        if (providedPhone && providedPhone !== storedPhone) {
+            const updateQuery = 'UPDATE users SET phone = ? WHERE id = ?';
+            db.query(updateQuery, [recipientPhone, user.id], (updateErr) => {
+                if (updateErr) {
+                    console.error('Error updating phone number:', updateErr);
+                    // Continue even if updating fails.
+                }
+            });
+        }
+        
+        // Start the verification using Twilio Verify.
+        client.verify.services(process.env.TWILIO_VERIFY_SERVICE_SID)
+            .verifications
+            .create({
+                to: recipientPhone,
+                channel: 'sms'
+            })
+            .then(verification => {
+                console.log('Verification started:', verification.sid);
+                // Store the user ID and phone in session for later reference.
+                req.session.userId = user.id;
+                req.session.phone = recipientPhone;
+                res.send({
+                    message: 'ვერიფიკაციის კოდი გაგზავნილია.',
+                    status: verification.status
+                });
+            })
+            .catch(error => {
+                console.error('Error starting verification:', error);
+                res.status(500).send('Error starting verification.');
+            });
     });
-  });
-  
-  /*
-    Endpoint for checking the verification code.
-    Once the user enters the code, we verify it using the Verify API.
-    If approved, you can then allow the password reset.
-  */
-  app.post('/check-verification', (req, res) => {
+});
+
+// Endpoint for checking the verification code (no changes)
+app.post('/check-verification', (req, res) => {
     const { code, newPassword } = req.body; // Expect code and new password from the client
-  
+
     const userId = req.session.userId;
     const phone = req.session.phone;
     if (!userId || !phone) {
-      return res.status(401).send('Session expired. Please request a new code.');
+        return res.status(401).send('Session expired. Please request a new code.');
     }
-  
-    client.verify.services(process.env.TWILIO_VERIFY_SERVICE_SID)
-      .verificationChecks
-      .create({
-        to: phone,
-        code: String(code).trim()
-      })
-      .then(verification_check => {
-        console.log('Verification check status:', verification_check.status);
-        if (verification_check.status === 'approved') {
-          // If verification is approved, update the user's password.
-          const updateQuery = 'UPDATE users SET password = ? WHERE id = ?';
-          db.query(updateQuery, [newPassword, userId], (err) => {
-            if (err) {
-              console.error('Error updating password:', err);
-              return res.status(500).send('Database error.');
-            }
-            // Clear session variables after a successful password update.
-            req.session.userId = null;
-            req.session.phone = null;
-            res.send('Password updated successfully!');
-          });
-        } else {
-          res.status(400).send({
-            message: 'Invalid verification code or code expired. Please try again.',
-            status: verification_check.status
-          });
-        }
-      })
-      .catch(error => {
-        console.error('Error verifying code:', error);
-        res.status(500).send('Error verifying code.');
-      });
-});
-  
 
+    client.verify.services(process.env.TWILIO_VERIFY_SERVICE_SID)
+        .verificationChecks
+        .create({
+            to: phone,
+            code: String(code).trim()
+        })
+        .then(verification_check => {
+            console.log('Verification check status:', verification_check.status);
+            if (verification_check.status === 'approved') {
+                // If verification is approved, update the user's password.
+                const updateQuery = 'UPDATE users SET password = ? WHERE id = ?';
+                db.query(updateQuery, [newPassword, userId], (err) => {
+                    if (err) {
+                        console.error('Error updating password:', err);
+                        return res.status(500).send('Database error.');
+                    }
+                    // Clear session variables after a successful password update.
+                    req.session.userId = null;
+                    req.session.phone = null;
+                    res.send('Password updated successfully!');
+                });
+            } else {
+                res.status(400).send({
+                    message: 'Invalid verification code or code expired. Please try again.',
+                    status: verification_check.status
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error verifying code:', error);
+            res.status(500).send('Error verifying code.');
+        });
+});
+
+// Port and server start (no changes)
 const PORT = process.env.PORT || 10000;  // Ensure you're using process.env.PORT for Render to map the port
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-

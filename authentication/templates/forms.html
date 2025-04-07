@@ -5,87 +5,148 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
         <link rel="stylesheet" href="/static/styles.css">
+        <style>
 
+            .add_course {
+                background-color: #ffffff;
+                padding: 15px 20px;
+                border-radius: 12px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                text-align: left;
+                width: 100%;
+                max-width: 400px; /* Maximum width */
+                height: 100%;
+                overflow: hidden;
+            }
+
+            h3 {
+                font-size: 18px;
+                color: #1f2937;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            label {
+                font-size: 14px;
+                color: #333;
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                margin: 5px 0 10px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                font-size: 14px;
+            }
+
+            .formss {
+                margin-bottom: 5px;
+            }
+
+            .formss input {
+                width: 48%;
+                display: inline-block;
+                margin-right: 4%;
+            }
+
+            .submit-btn {
+                padding: 10px 20px;
+                font-size: 16px;
+                color: #457b9d;
+                background: #f1faee;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background 0.3s ease, transform 0.2s ease;
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .submit-btn:hover {
+                background: #a8dadc;
+                transform: scale(1.05);
+            }
+
+            /* Reduce height by making each input area smaller */
+            #week {
+                max-height: 250px;
+                overflow-y: auto;
+            }
+
+            /* Media Query for responsiveness */
+            @media (max-width: 600px) {
+                .formss input {
+                    width: 100%;
+                    margin-right: 0;
+                }
+            }
+        </style>
     </head>
     <body>
-        <h2>ახალი კურსის დაწყება</h2>
-        <div id="menu-container"></div> <!-- Placeholder for the menu -->
-        <script src="/static/menu.js"></script>
-        <!--new course-->
-        <!-- New course form -->
-        <form class="add_course" id="course_form" action="submit-form" method="post">
-            <h3>შეიყვანეთ კურსის ინფორმაცია</h3>
-            <label for="group_name">ჯგუფის სახელი:</label><br>
-            <input type="text" id="group_name" name="group_name" placeholder="ჯგუფის სახელი" required><br>
+        <div>
+            <h2>ახალი კურსის დაწყება</h2>
+            <div id="menu-container"></div> <!-- Placeholder for the menu -->
+            <script src="/static/menu.js"></script>
 
-            <label for="classes">გაკვეთილების რაოდენობა:</label><br>
-            <input id="classes" name="classes" type="number" placeholder="00" required><br>
+            <!-- New course form -->
+            <form class="add_course" id="course_form" action="/submit-course-form" method="post">
+                <h3>შეიყვანეთ კურსის ინფორმაცია</h3>
+                
+                <label for="group_name">ჯგუფის სახელი:</label>
+                <input type="text" id="group_name" name="group_name" placeholder="ჯგუფის სახელი" required>
+                
+                <label for="classes">გაკვეთილების რაოდენობა:</label>
+                <input id="classes" name="classes" placeholder="00" required>
+                
+                <label for="nmb_students">სტუდენტების რაოდენობა:</label>
+                <input id="nmb_students" name="nmb_students" placeholder="00" required>
+                
+                <label for="week">კვირის განრიგი:</label>
+                <div id="week">
+                    <div class="formss">
+                        <label for="monday">ორშაბათი</label>
+                        <input type="time" id="monday" name="monday">
+                        <input type="time" id="monday_end" name="monday_end">
+                    </div>
+                    <div class="formss">
+                        <label for="tuesday">სამშაბათი</label>
+                        <input type="time" id="tuesday" name="tuesday">
+                        <input type="time" id="tuesday_end" name="tuesday_end">
+                    </div>
+                    <div class="formss">
+                        <label for="wednesday">ოთხშაბათი</label>
+                        <input type="time" id="wednesday" name="wednesday">
+                        <input type="time" id="wednesday_end" name="wednesday_end">
+                    </div>
+                    <div class="formss">
+                        <label for="thursday">ხუთშაბათი</label>
+                        <input type="time" id="thursday" name="thursday">
+                        <input type="time" id="thursday_end" name="thursday_end">
+                    </div>
+                    <div class="formss">
+                        <label for="friday">პარასკევი</label>
+                        <input type="time" id="friday" name="friday">
+                        <input type="time" id="friday_end" name="friday_end">
+                    </div>
+                    <div class="formss">
+                        <label for="saturday">შაბათი</label>
+                        <input type="time" id="saturday" name="saturday">
+                        <input type="time" id="saturday_end" name="saturday_end">
+                    </div>
+                    <div class="formss">
+                        <label for="sunday">კვირა</label>
+                        <input type="time" id="sunday" name="sunday">
+                        <input type="time" id="sunday_end" name="sunday_end">
+                    </div>
+                </div>
+                
+                <button class="submit-btn" type="submit">კურსის შექმნა</button>
+            </form>
+        </div>
 
-            <label for="nmb_students">სტუდენტების რაოდენობა:</label><br>
-            <input id="nmb_students" name="nmb_students" type="number" placeholder="00" required><br>
-
-            <label for="week">კვირის განრიგი:</label><br>
-            <div id="week">
-
-            <div class="formss">
-                <label for="monday">ორშაბათი - დაწყება</label>
-                <input type="time" id="monday" name="monday">
-                <input type="time" id="monday_end" name="monday_end">
-                <label for="monday_end">დასასრული</label>
-            </div>
-            <div class="formss">
-                <label for="tuesday">სამშაბათი - დაწყება</label>
-                <input type="time" id="tuesday" name="tuesday">
-                <input type="time" id="tuesday_end" name="tuesday_end">
-                <label for="tuesday_end">დასასრული</label>
-            </div>
-            <div class="formss">
-                <label for="wednesday">ოთხშაბათი - დაწყება</label>
-                <input type="time" id="wednesday" name="wednesday">
-                <input type="time" id="wednesday_end" name="wednesday_end">
-                <label for="wednesday_end">დასასრული</label>
-            </div>
-            <div class="formss">
-                <label for="thursday">ხუთშაბათი - დაწყება</label>
-                <input type="time" id="thursday" name="thursday">
-                <input type="time" id="thursday_end" name="thursday_end">
-                <label for="thursday_end">დასასრული</label>
-            </div>
-            <div class="formss">
-                <label for="friday">პარასკევი - დაწყება</label>
-                <input type="time" id="friday" name="friday">
-                <input type="time" id="friday_end" name="friday_end">
-                <label for="friday_end">დასასრული</label>
-            </div>
-            <div class="formss">
-                <label for="saturday">შაბათი - დაწყება</label>
-                <input type="time" id="saturday" name="saturday">
-                <input type="time" id="saturday_end" name="saturday_end">
-                <label for="saturday_end">დასასრული</label>
-            </div>
-            <div class="formss">
-                <label for="sunday">კვირა - დაწყება</label>
-                <input type="time" id="sunday" name="sunday">
-                <input type="time" id="sunday_end" name="sunday_end">
-                <label for="sunday_end">დასასრული</label>
-            </div>
-            </div>
-            <button type="button" class="student_rows" id="student_rows">შექმნა</button>
-        </form>
-        
-<!-- Hidden student form (Initially hidden) -->
-<div id="student_form_popup" class="student_form_popup">
-    <form class="add" id="Form" action="/submit-form" method="post">
-        <h3>სტუდენტის ინფორმაცია</h3>
-        <div id="students_container" class="formss">
-            <!-- Dynamic student fields will appear here -->
-        </div>            
-        <input id="submit-btn" name="submit-btn" class="submit_btn" type="submit" value="დამატება">
-    </form>
-    <button type="button" id="close_student_form" class="close_student_form">დახურვა</button>
-</div>
-
-<script src="/templates/script.js"></script>
-        
+        <script src="script.js" defer></script>
     </body>
 </html>

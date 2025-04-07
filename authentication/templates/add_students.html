@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>სტუდენტების დამატება</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .submit-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #457b9d;
+            background: #f1faee;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: #a8dadc;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <h2>სტუდენტების დამატება</h2>
+    <div id="menu-container"></div> <!-- Placeholder for the menu -->
+    <script src="/static/menu.js"></script>
+
+    <!-- Student Form -->
+    <form id="student_form" action="/submit-student-form" method="post">
+        <div id="students_container" class="students-container">
+            <div class="student">
+                <label>სახელი:</label>
+                <input type="text" name="students[0][name]" required><br>
+
+                <label>გვარი:</label>
+                <input type="text" name="students[0][surname]" required><br>
+
+                <label>Email:</label>
+                <input type="email" name="students[0][email]" required><br>
+
+                <label>მობილური ნომერი:</label>
+                <input type="tel" name="students[0][phone]" required><br>
+            </div>
+        </div>
+
+        <button type="submit" value="დამატება" class="submit-btn">add</button>
+    </form>
+
+    <!-- Include your custom script -->
+    <script src="script.js" defer></script>
+
+</body>
+
+</html>

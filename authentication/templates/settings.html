@@ -2,159 +2,164 @@
 <html lang="en">
 <head>
     <title>Settings</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/styles.css" />
     <style>
-
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
             background: radial-gradient(circle, #1E3A8A, #3B82F6, #b0d0f8);
-            overflow: hidden;
-            text-align: center; /* Center align all text */
-        }
-        h2 {
-            text-align: center;
-            font-size: 30px;
-            margin-bottom: 20px; /* Space below the heading */
-        }
-        .message-container {
-            position: relative; /* Enables positioning inside the container */
-            text-align: center;
-            background: #457b9d;
-            border-radius: 25px;
-            padding: 25px;
-            width: 350px;
-            box-shadow: 0 0 20px rgba(241, 250, 238, 0.6); /* Soft glow effect */
-            animation: bounce 1s infinite alternate ease-in-out;
-        }
-        #menu-container {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 18px;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
 
-        .hidden { 
-            display: none; 
-        }
-
-        input {
+        /* Header */
+        header {
             width: 100%;
-            padding: 8px;
-            margin: 10px 0;
-            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+            background: transparent;
         }
 
-        .submit-btn {
+        h2 {
+            font-size: 28px;
+            color: white;
+            margin: 0;
+        }
+
+        /* Fixed menu button like all other pages */
+        .openbtn {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            font-size: 20px;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
             border: none;
-            background-color: #007bff;
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #eef3f6;
-            width: 15%;
-            border-radius: 20px;
+            border-radius: 999px;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
-        .submit-btn:hover {
-            background-color: #0056b3;
+        .openbtn:hover {
+            background-color: #333;
+            transform: scale(1.05);
         }
 
-        .reset-btn{
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px;
+        }
+
+        .button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 12px;
             border: none;
-            background-color: #007bff;
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #eef3f6;
-            width: 15%;
-            border-radius: 20px;
+            border-radius: 999px;
+            color: white;
+            background-color: #1f2937;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
         }
 
-        .reset-btn:hover {
-            background-color: #0056b3;
+        .button:hover {
+            background-color: #374151;
+            transform: scale(1.05);
         }
 
-        #resetPasswordPopup {
+        .button.cancel {
+            background-color: #dc2626;
+        }
+
+        .button.cancel:hover {
+            background-color: #b91c1c;
+        }
+
+        #resetPasswordPopup,
+        #securityQuestionModal {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
             text-align: center;
-            width: 350px;
+            width: 360px;
+            display: none;
+            z-index: 10;
         }
 
-        .popup-content {
-            position: relative;
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
 
         .close-btn {
             position: absolute;
             top: 10px;
             right: 15px;
-            cursor: pointer;
             font-size: 20px;
+            cursor: pointer;
+            color: #333;
         }
 
-        .security-modal {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
+        .message-container {
+            background: #457b9d;
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            text-align: center;
-            width: 300px;
+            color: white;
         }
 
-        .cancel_button {
-            background-color: red;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- Course History Deletion Section -->
-    <div id="menu-container"></div> <!-- Placeholder for the menu -->
+    <div id="menu-container">
+        <button class="openbtn" onclick="openNav()">☰</button>
+    </div>
     <script src="/static/menu.js"></script>
 
-    <button class="submit-btn" id="delete">წაშლა</button>
+    <header>
+        <h2>Settings</h2>
+    </header>
 
-    <!-- Security Question Modal -->
+    <main>
+
+        <button class="button" id="delete">წაშლა</button>
+
+        <!-- Open Reset Password Popup -->
+        <button id="openResetPopup" class="button">პაროლის აღდგენა</button>
+    </main>
+
+    <!-- Security Code Modal -->
     <div id="securityQuestionModal" class="hidden">
-        <h2 id="securityQuestion">მასწავლებლის წაშლის უფლებების დასამტკიცებელი კოდი</h2>
-        <input type="text" id="securityAnswer" placeholder="კოდი"><br>
-        <button id="verifyAnswer" class="verify_button">წაშლა</button>
-        <button id="cancel" class="cancel_button">გაუქმება</button>
+        <h2>მასწავლებლის წაშლის უფლებების დასამტკიცებელი კოდი</h2>
+        <input type="text" id="securityAnswer" placeholder="კოდი" />
+        <button id="verifyAnswer" class="button">წაშლა</button>
+        <button id="cancel" class="button cancel">გაუქმება</button>
     </div>
 
-    <!-- Reset Password Button -->
-    <button id="openResetPopup" class="reset-btn">პაროლის აღდგენა</button>
-
-    <!-- Password Reset Popup (Hidden by Default) -->
+    <!-- Reset Password Popup -->
     <div id="resetPasswordPopup" class="hidden">
         <div class="popup-content">
             <span id="closePopup" class="close-btn">&times;</span>
-            
-            <!-- Reset Password Section -->
             <div class="message-container">
-                <div class="icon">🔑</div>
+                <div class="icon" style="font-size: 30px;">🔑</div>
                 <h2>პაროლის განახლება SMS ვერიფიკაციით</h2>
+
                 <form id="startVerificationForm">
                     <h3>ვერიფიკაციის კოდის მოთხოვნა</h3>
                     <label for="email">Email:</label>
@@ -163,10 +168,9 @@
                     <label for="phone">ტელეფონი (+995XXXXXXXX):</label>
                     <input type="text" id="phone" name="phone" placeholder="+995XXXXXXXX" required />
 
-                    <button class="submit-btn" type="submit">ვერიფიკაციის კოდის მიღება</button>
+                    <button class="button" type="submit">ვერიფიკაციის კოდის მიღება</button>
                 </form>
 
-                <!-- Form to verify the code and reset the password -->
                 <form id="checkVerificationForm" class="hidden">
                     <h3>დაადასტურე კოდი და გაანახლე პაროლი</h3>
                     <label for="code">ვერიფიკაციის კოდი:</label>
@@ -175,111 +179,78 @@
                     <label for="newPassword">ახალი პაროლი:</label>
                     <input type="password" id="newPassword" name="newPassword" placeholder="Abcd123!" required />
 
-                    <button class="submit-btn" type="submit">პაროლის განახლება</button>
+                    <button class="button" type="submit">პაროლის განახლება</button>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- Script Logic -->
     <script>
-        // Password reset functionality
-        document.getElementById("openResetPopup").addEventListener("click", function(event) {
-            event.preventDefault();
+        document.getElementById("openResetPopup").addEventListener("click", function (e) {
+            e.preventDefault();
             document.getElementById("resetPasswordPopup").classList.remove("hidden");
         });
 
-        document.getElementById("closePopup").addEventListener("click", function() {
+        document.getElementById("closePopup").addEventListener("click", function () {
             document.getElementById("resetPasswordPopup").classList.add("hidden");
         });
 
-        // Handle the start verification form submission
-        document.getElementById("startVerificationForm").addEventListener("submit", function(e) {
+        document.getElementById("startVerificationForm").addEventListener("submit", function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = new URLSearchParams(formData);
-            
+
             fetch("/start-verification", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: data
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: data,
             })
-            .then(response => {
-                if (!response.ok) return response.text().then(text => { throw new Error(text) });
-                return response.json();
-            })
-            .then(result => {
-                alert(result.message);
-                document.getElementById("startVerificationForm").classList.add("hidden");
-                document.getElementById("checkVerificationForm").classList.remove("hidden");
-            })
-            .catch(error => {
-                console.error("Error starting verification:", error);
-                alert("Error: " + error.message);
-            });
+                .then(res => res.ok ? res.json() : res.text().then(txt => { throw new Error(txt); }))
+                .then(result => {
+                    alert(result.message);
+                    document.getElementById("startVerificationForm").classList.add("hidden");
+                    document.getElementById("checkVerificationForm").classList.remove("hidden");
+                })
+                .catch(error => alert("Error: " + error.message));
         });
 
-        // Handle the check verification form submission
-        document.getElementById("checkVerificationForm").addEventListener("submit", function(e) {
+        document.getElementById("checkVerificationForm").addEventListener("submit", function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = new URLSearchParams(formData);
-            
+
             fetch("/check-verification", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: data
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: data,
             })
-            .then(response => {
-                if (!response.ok) return response.text().then(text => { throw new Error(text) });
-                return response.text();
-            })
-            .then(result => {
-                alert(result);
-            })
-            .catch(error => {
-                console.error("Error verifying code:", error);
-                alert("Error: " + error.message);
-            });
+                .then(res => res.ok ? res.text() : res.text().then(txt => { throw new Error(txt); }))
+                .then(result => alert(result))
+                .catch(error => alert("Error: " + error.message));
         });
 
-        // Handle the delete history functionality
-        document.getElementById("delete").addEventListener("click", function() {
+        document.getElementById("delete").addEventListener("click", () => {
             document.getElementById("securityQuestionModal").classList.remove("hidden");
         });
 
-        document.getElementById("cancel").addEventListener("click", function() {
+        document.getElementById("cancel").addEventListener("click", () => {
             document.getElementById("securityQuestionModal").classList.add("hidden");
         });
 
-        document.getElementById("verifyAnswer").addEventListener("click", function() {
-            const securityAnswer = document.getElementById("securityAnswer").value.trim();
-            const correctAnswer = "მასწ11"; // Correct answer for verification
-            
-            if (securityAnswer === correctAnswer) {
-                fetch("/delete-course-history", {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("კურსის ისტორია წაშლილია.");
-                    } else {
-                        alert("წაშლის პროცესში პრობლემა აღმოჩნდა.");
-                    }
-                    document.getElementById("securityQuestionModal").classList.add("hidden");
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("ისტორიის წაშლა არ განხორციელდა.");
-                    document.getElementById("securityQuestionModal").classList.add("hidden");
-                });
+        document.getElementById("verifyAnswer").addEventListener("click", () => {
+            const answer = document.getElementById("securityAnswer").value.trim();
+            if (answer === "მასწ11") {
+                fetch("/delete-course-history", { method: "DELETE" })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert(data.success ? "კურსის ისტორია წაშლილია." : "წაშლის პროცესში პრობლემა აღმოჩნდა.");
+                        document.getElementById("securityQuestionModal").classList.add("hidden");
+                    })
+                    .catch(() => {
+                        alert("ისტორიის წაშლა არ განხორციელდა.");
+                        document.getElementById("securityQuestionModal").classList.add("hidden");
+                    });
             } else {
                 alert("არასწორი ვერიფიკაციის კოდი.");
             }
