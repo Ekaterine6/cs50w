@@ -41,6 +41,23 @@
 
         tr:hover {
             background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        .students-info {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .student-row {
+            background-color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -52,13 +69,9 @@
     <table id="courses-table">
         <thead>
             <tr>
-                <th>კურსის ID და რაოდენობა</th>
+                <th>კურსის ID და კლასის რაოდენობა</th>
                 <th>ჯგუფი</th>
-                <th>სტუდენტის ID</th>
-                <th>სახელი</th>
-                <th>გვარი</th>
-                <th>Email</th>
-                <th>ტელეფონი</th>
+                <th>საგანი</th>
             </tr>
         </thead>
         <tbody id="courses-tbody">
@@ -66,28 +79,67 @@
         </tbody>
     </table>
 
+    <div id="students-info" class="students-info" style="display: none;">
+        <h3>სტუდენტები კურსის მიხედვით</h3>
+        <div id="student-details"></div>
+    </div>
+
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        fetch('/fetch-courses-data')
-          .then(response => response.json())
-          .then(data => {
-            const tbody = document.getElementById("courses-tbody");
-            data.forEach(course => {
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                <td>${course.course_id} - ${course.classes}</td>
-                <td>${course.group_name}</td>
-                <td>${course.student_id}</td>
-                <td>${course.name}</td>
-                <td>${course.surname}</td>
-                <td>${course.email}</td>
-                <td>${course.phone}</td>
-              `;
-              tbody.appendChild(row);
-            });
-          })
-          .catch(error => console.error('Error, unable to get students:', error));
-      });
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/fetch-courses-data')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("courses-tbody");
+                    data.forEach(course => {
+                        const row = document.createElement('tr');
+                        row.dataset.courseId = course.course_id; // Store course ID in a data attribute
+                        row.innerHTML = `
+                            <td>${course.course_id} - ${course.classes}</td>
+                            <td>${course.group_name}</td>
+                            <td>${course.subject}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+
+                    // Add click event to each row
+                    const rows = document.querySelectorAll("#courses-tbody tr");
+                    rows.forEach(row => {
+                        row.addEventListener("click", function() {
+                            const courseId = this.dataset.courseId;
+                            console.log("Row clicked, course ID:", courseId); // Debugging log to check if course ID is correct
+
+                            fetch(`/fetch-students-for-course/${courseId}`)
+                                .then(response => response.json())
+                                .then(students => {
+                                    const studentDetails = document.getElementById("student-details");
+                                    const studentsInfo = document.getElementById("students-info");
+                                    studentDetails.innerHTML = ""; // Clear previous student data
+
+                                    if (students.length > 0) {
+                                        students.forEach(student => {
+                                            const studentRow = document.createElement("div");
+                                            studentRow.classList.add("student-row");
+                                            studentRow.innerHTML = `
+                                                <p><strong>ID:</strong> ${student.student_id}</p>
+                                                <p><strong>სახელი:</strong> ${student.name}</p>
+                                                <p><strong>გვარი:</strong> ${student.surname}</p>
+                                                <p><strong>Email:</strong> ${student.email}</p>
+                                                <p><strong>ტელეფონი:</strong> ${student.phone}</p>
+                                            `;
+                                            studentDetails.appendChild(studentRow);
+                                        });
+                                        studentsInfo.style.display = "block"; // Show the student details section
+                                    } else {
+                                        studentDetails.innerHTML = "<p>ეს კურსი არ შეიცავს სტუდენტებს.</p>";
+                                        studentsInfo.style.display = "block";
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching students:', error));
+                        });
+                    });
+                })
+                .catch(error => console.error('Error, unable to get courses:', error));
+        });
     </script>
 </body>
 </html>

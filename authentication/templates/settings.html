@@ -14,7 +14,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
             width: 100%;
             padding: 15px;
@@ -28,7 +27,6 @@
             margin: 0;
         }
 
-        /* Fixed menu button like all other pages */
         .openbtn {
             position: absolute;
             top: 80px;
@@ -83,19 +81,23 @@
 
         #resetPasswordPopup,
         #securityQuestionModal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            width: 360px;
-            display: none;
-            z-index: 10;
-        }
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    width: 360px;
+    z-index: 10;
+}
+
+/* Only this controls visibility */
+.hidden {
+    display: none;
+}
 
         input {
             width: 100%;
@@ -187,39 +189,39 @@
 
     <!-- Script Logic -->
     <script>
-        document.getElementById("openResetPopup").addEventListener("click", function (e) {
+        document.getElementById("openResetPopup")?.addEventListener("click", function (e) {
             e.preventDefault();
             document.getElementById("resetPasswordPopup").classList.remove("hidden");
         });
-
-        document.getElementById("closePopup").addEventListener("click", function () {
+        
+        document.getElementById("closePopup")?.addEventListener("click", function () {
             document.getElementById("resetPasswordPopup").classList.add("hidden");
         });
+        document.getElementById("startVerificationForm")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = new URLSearchParams(formData);
 
-        document.getElementById("startVerificationForm").addEventListener("submit", function (e) {
+    fetch("/start-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data,
+    })
+        .then(res => res.ok ? res.json() : res.text().then(txt => { throw new Error(txt); }))
+        .then(result => {
+            alert(result.message);
+            document.getElementById("startVerificationForm").classList.add("hidden");
+            document.getElementById("checkVerificationForm").classList.remove("hidden");
+        })
+        .catch(error => alert("Error: " + error.message));
+});
+
+        
+        document.getElementById("checkVerificationForm")?.addEventListener("submit", function (e) {
             e.preventDefault();
             const formData = new FormData(this);
             const data = new URLSearchParams(formData);
-
-            fetch("/start-verification", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: data,
-            })
-                .then(res => res.ok ? res.json() : res.text().then(txt => { throw new Error(txt); }))
-                .then(result => {
-                    alert(result.message);
-                    document.getElementById("startVerificationForm").classList.add("hidden");
-                    document.getElementById("checkVerificationForm").classList.remove("hidden");
-                })
-                .catch(error => alert("Error: " + error.message));
-        });
-
-        document.getElementById("checkVerificationForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = new URLSearchParams(formData);
-
+        
             fetch("/check-verification", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -229,16 +231,16 @@
                 .then(result => alert(result))
                 .catch(error => alert("Error: " + error.message));
         });
-
-        document.getElementById("delete").addEventListener("click", () => {
+        
+        document.getElementById("delete")?.addEventListener("click", () => {
             document.getElementById("securityQuestionModal").classList.remove("hidden");
         });
-
-        document.getElementById("cancel").addEventListener("click", () => {
+        
+        document.getElementById("cancel")?.addEventListener("click", () => {
             document.getElementById("securityQuestionModal").classList.add("hidden");
         });
-
-        document.getElementById("verifyAnswer").addEventListener("click", () => {
+        
+        document.getElementById("verifyAnswer")?.addEventListener("click", () => {
             const answer = document.getElementById("securityAnswer").value.trim();
             if (answer === "მასწ11") {
                 fetch("/delete-course-history", { method: "DELETE" })
@@ -255,6 +257,8 @@
                 alert("არასწორი ვერიფიკაციის კოდი.");
             }
         });
-    </script>
+        </script>
+        
+        
 </body>
 </html>

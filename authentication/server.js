@@ -88,7 +88,7 @@ app.post('/submit-course-form', (req, res) => {
     const {
         group_name,
         classes,
-        nmb_students,
+        subject,
         monday,
         monday_end,
         tuesday,
@@ -107,14 +107,14 @@ app.post('/submit-course-form', (req, res) => {
 
     const courseSql = `
         INSERT INTO courses 
-        (group_name, classes, nmb_students, monday, monday_end, tuesday, tuesday_end, wednesday, wednesday_end, thursday, thursday_end, friday, friday_end, saturday, saturday_end, sunday, sunday_end)
+        (group_name, classes, subject, monday, monday_end, tuesday, tuesday_end, wednesday, wednesday_end, thursday, thursday_end, friday, friday_end, saturday, saturday_end, sunday, sunday_end)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     
     db.query(courseSql, [
         group_name || null,
         classes,
-        nmb_students,
+        subject,
         monday || null,
         monday_end || null,
         tuesday || null,
@@ -142,24 +142,41 @@ app.post('/submit-course-form', (req, res) => {
 
 // Separate route for submitting student data
 // Example backend route for student submission
-
 app.post('/submit-student-form', (req, res) => {
     const students = req.body.students;
+    const courseId = req.body.course_id;
 
-    students.forEach((student) => {
-        const query = `INSERT INTO students (name, surname, email, phone) VALUES (?, ?, ?, ?)`;
-        db.query(query, [student.name, student.surname, student.email, student.phone], (err, result) => {
-            if (err) {
-                console.error('Error inserting student:', err);
-                res.status(500).json({ error: 'There was an error adding students' });
-            } else {
-                console.log('Student added:', result);
-            }
+    // Check if courseId exists
+    if (!courseId) {
+        return res.status(400).json({ error: 'Course ID is required' });
+    }
+
+    // Create an array of promises for each student insertion
+    const insertPromises = students.map((student) => {
+        const query = `INSERT INTO students (name, surname, email, phone, course_id) VALUES (?, ?, ?, ?, ?)`;
+        return new Promise((resolve, reject) => {
+            db.query(query, [student.name, student.surname, student.email, student.phone, courseId], (err, result) => {
+                if (err) {
+                    reject(err); // Reject promise if error occurs
+                } else {
+                    resolve(result); // Resolve promise when query succeeds
+                }
+            });
         });
     });
 
-    res.status(200).json({ message: 'Students added successfully' });
+    Promise.all(insertPromises)
+    .then(() => {
+        console.log('All students added successfully');
+        res.redirect('/students-list'); // ✅ Correct route to serve student.html
+    })
+    .catch((err) => {
+        console.error('Error inserting students:', err);
+        res.status(500).json({ error: 'There was an error adding students' });
+    });
+
 });
+
 
 // Route to fetch courses and students (no changes)
 app.get('/fetch-courses-data', (req, res) => {
@@ -167,7 +184,7 @@ app.get('/fetch-courses-data', (req, res) => {
         SELECT c.id AS course_id,
                c.group_name,
                c.classes,
-               c.nmb_students,
+               c.subject,
                c.monday,
                c.monday_end,
                c.tuesday,
@@ -200,6 +217,17 @@ app.get('/fetch-courses-data', (req, res) => {
     });
 });
 
+app.get('/get-course-list', (req, res) => {
+    db.query('SELECT id, group_name, subject FROM courses', (err, results) => {
+      if (err) {
+        console.error('Error fetching course list:', err);
+        return res.status(500).send('Error fetching courses.');
+      }
+      res.json(results);
+    });
+  });
+
+  
 
 // Serve the index page (no changes)
 app.get('/index.html', (req, res) => {
@@ -341,6 +369,36 @@ app.post('/check-verification', (req, res) => {
             res.status(500).send('Error verifying code.');
         });
 });
+
+app.get('/fetch-courses-data', (req, res) => {
+    connection.query('SELECT * FROM courses', (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Failed to fetch courses' });
+        }
+        res.json(results);
+    });
+});
+
+app.get('/fetch-students-for-course/:courseId', (req, res) => {
+    const { courseId } = req.params;
+    connection.query(
+        'SELECT students.id, students.name, students.surname, students.email, students.phone ' +
+        'FROM students ' +
+        'JOIN courses ON students.course_id = courses.course_id ' +
+        'WHERE courses.course_id = ?',
+        [courseId],
+        (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Failed to fetch students' });
+            }
+            res.json(results);
+        }
+    );
+});
+
+
 
 // Port and server start (no changes)
 const PORT = process.env.PORT || 10000;  // Ensure you're using process.env.PORT for Render to map the port

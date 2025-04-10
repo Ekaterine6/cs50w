@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-        /* Custom styles for the form */
         .students-container {
             background: #ffffff;
             padding: 30px;
@@ -40,7 +39,6 @@
             border-radius: 8px;
             margin-bottom: 15px;
             box-sizing: border-box;
-            transition: border 0.3s ease;
         }
 
         input[type="text"]:focus,
@@ -60,10 +58,10 @@
             border-radius: 20px;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.2s ease;
-            max-width: 200px; /* Set a max-width for the button */
-            display: block; /* Centers the button */
-            margin-left: auto; /* Centers the button */
-            margin-right: auto; /* Centers the button */
+            max-width: 200px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .submit-btn:hover {
@@ -80,10 +78,9 @@
 <body>
     <div>
         <h2>სტუდენტების დამატება</h2>
-        <div id="menu-container"></div> <!-- Placeholder for the menu -->
+        <div id="menu-container"></div>
         <script src="/static/menu.js"></script>
 
-        <!-- Student Form -->
         <form id="student_form" action="/submit-student-form" method="post">
             <div id="students_container" class="students-container">
                 <div class="student">
@@ -98,6 +95,11 @@
 
                     <label>მობილური ნომერი:</label>
                     <input type="tel" name="students[0][phone]" required placeholder="+995 000 00 00 00"><br>
+
+                    <label for="courseSelect">Select Course:</label>
+                    <select id="courseSelect" name="course_id" required>
+                        <option value="">Select a course</option>
+                    </select>
                 </div>
             </div>
 
@@ -105,8 +107,24 @@
         </form>
     </div>
 
-    <!-- Include your custom script -->
-    <script src="script.js" defer></script>
+    <script>
+        // Fetch course list and populate dropdown
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('/get-course-list')
+                .then(response => response.json())
+                .then(courses => {
+                    const courseSelect = document.getElementById('courseSelect');
+                    courses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course.id;
+                        option.textContent = `${course.group_name} - ${course.subject}`;
+                        courseSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching courses:', error));
+        });
+    </script>
+    
 
 </body>
 
