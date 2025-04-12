@@ -382,22 +382,21 @@ app.get('/fetch-courses-data', (req, res) => {
 
 app.get('/fetch-students-for-course/:courseId', (req, res) => {
     const { courseId } = req.params;
-    connection.query(
-        'SELECT students.id, students.name, students.surname, students.email, students.phone ' +
-        'FROM students ' +
-        'JOIN courses ON students.course_id = courses.course_id ' +
-        'WHERE courses.course_id = ?',
-        [courseId],
-        (err, results) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ error: 'Failed to fetch students' });
-            }
-            res.json(results);
-        }
-    );
-});
 
+    const query = `
+        SELECT students.id, students.name, students.surname, students.email, students.phone
+        FROM students
+        WHERE students.course_id = ?
+    `;
+
+    db.query(query, [courseId], (err, results) => {  // ✅ Correct: using db.query
+        if (err) {
+            console.error('Error fetching students:', err);
+            return res.status(500).json({ error: 'Failed to fetch students' });
+        }
+        res.json(results);
+    });
+});
 
 
 // Port and server start (no changes)

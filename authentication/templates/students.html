@@ -44,20 +44,40 @@
             cursor: pointer;
         }
 
-        .students-info {
-            margin-top: 20px;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
         }
-        
-        .student-row {
-            background-color: #fff;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -79,10 +99,24 @@
         </tbody>
     </table>
 
-    <div id="students-info" class="students-info" style="display: none;">
-        <h3>სტუდენტები კურსის მიხედვით</h3>
-        <div id="student-details"></div>
+    <div id="studentModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeModal" class="close-btn">&times;</span>
+            <h2>სტუდენტები კურსის მიხედვით</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>სახელი</th>
+                        <th>გვარი</th>
+                        <th>Email</th>
+                        <th>ტელეფონი</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody"></tbody>
+            </table>
+        </div>
     </div>
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -106,33 +140,44 @@
                     rows.forEach(row => {
                         row.addEventListener("click", function() {
                             const courseId = this.dataset.courseId;
-                            console.log("Row clicked, course ID:", courseId); // Debugging log to check if course ID is correct
 
                             fetch(`/fetch-students-for-course/${courseId}`)
                                 .then(response => response.json())
                                 .then(students => {
-                                    const studentDetails = document.getElementById("student-details");
-                                    const studentsInfo = document.getElementById("students-info");
-                                    studentDetails.innerHTML = ""; // Clear previous student data
+                                    const studentTableBody = document.getElementById("studentTableBody");
+                                    const studentModal = document.getElementById("studentModal");
+                                    const closeModal = document.getElementById("closeModal");
+
+                                    studentTableBody.innerHTML = ""; // Clear previous student data
 
                                     if (students.length > 0) {
                                         students.forEach(student => {
-                                            const studentRow = document.createElement("div");
-                                            studentRow.classList.add("student-row");
-                                            studentRow.innerHTML = `
-                                                <p><strong>ID:</strong> ${student.student_id}</p>
-                                                <p><strong>სახელი:</strong> ${student.name}</p>
-                                                <p><strong>გვარი:</strong> ${student.surname}</p>
-                                                <p><strong>Email:</strong> ${student.email}</p>
-                                                <p><strong>ტელეფონი:</strong> ${student.phone}</p>
+                                            const row = document.createElement("tr");
+                                            row.innerHTML = `
+                                                <td>${student.name}</td>
+                                                <td>${student.surname}</td>
+                                                <td>${student.email}</td>
+                                                <td>${student.phone}</td>
                                             `;
-                                            studentDetails.appendChild(studentRow);
+                                            studentTableBody.appendChild(row);
                                         });
-                                        studentsInfo.style.display = "block"; // Show the student details section
+                                        studentModal.classList.remove("hidden"); // Show the modal
                                     } else {
-                                        studentDetails.innerHTML = "<p>ეს კურსი არ შეიცავს სტუდენტებს.</p>";
-                                        studentsInfo.style.display = "block";
+                                        studentTableBody.innerHTML = "<tr><td colspan='4'>ეს კურსი არ შეიცავს სტუდენტებს.</td></tr>";
+                                        studentModal.classList.remove("hidden");
                                     }
+
+                                    // Close the modal when the close button is clicked
+                                    closeModal.addEventListener("click", () => {
+                                        studentModal.classList.add("hidden");
+                                    });
+
+                                    // Close the modal when clicking outside the modal content area
+                                    window.addEventListener("click", (e) => {
+                                        if (e.target === studentModal) {
+                                            studentModal.classList.add("hidden");
+                                        }
+                                    });
                                 })
                                 .catch(error => console.error('Error fetching students:', error));
                         });
