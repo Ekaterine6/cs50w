@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>მონაწილეობა</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/styles.css">
+  <style>
+    .course-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .course-buttons button {
+      padding: 10px 20px;
+      background-color: #3B82F6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .student-row {
+      margin: 10px 0;
+      padding: 10px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .attendance-table {
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #10B981;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .totals {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">დასწრების აღრიცხვა</h2>
+  <div id="menu-container"></div>
+  <script src="/static/menu.js"></script>
+
+  <div class="course-buttons" id="courseButtons"></div>
+
+  <form id="attendanceForm" class="attendance-table hidden">
+    <div id="studentsContainer"></div>
+    <div id="submitContainer" class="hidden">
+      <button type="submit" class="submit-btn">აღრიცხვის შენახვა</button>
+    </div>
+  </form>
+
+  <script>
+    let currentCourseId = null;
+
+    // Load all courses as buttons
+    fetch('/attendance/courses')
+      .then(res => res.json())
+      .then(courses => {
+        const container = document.getElementById("courseButtons");
+        courses.forEach(course => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.textContent = course.group_name;
+            btn.addEventListener("click", () => loadStudents(course.id));
+          container.appendChild(btn);
+        });
+      });
+
+    // Load students for selected course
+    function loadStudents(courseId) {
+      currentCourseId = courseId;
+      fetch(`/attendance/students/${courseId}`)
+        .then(res => res.json())
+        .then(students => {
+          const container = document.getElementById("studentsContainer");
+          const form = document.getElementById("attendanceForm");
+          const submitContainer = document.getElementById("submitContainer");
+
+          container.innerHTML = "";
+
+          students.forEach(student => {
+            const div = document.createElement("div");
+            div.className = "student-row";
+            div.innerHTML = `
+              <strong>${student.name} ${student.surname}</strong><br>
+              <label>
+                <input type="radio" name="attendance_${student.id}" value="present" required> არის
+              </label>
+              <label>
+                <input type="radio" name="attendance_${student.id}" value="absent"> არა
+              </label>
+              <div class="totals">✅ დასწრება: ${student.present_count || 0} | ❌ გაცდენა: ${student.absent_count || 0}</div>
+            `;
+            container.appendChild(div);
+          });
+
+          form.classList.remove("hidden");
+          submitContainer.classList.remove("hidden");
+        });
+    }
+
+    // Submit attendance
+    document.getElementById("attendanceForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const records = [];
+
+      for (let [key, value] of formData.entries()) {
+        if (key.startsWith("attendance_")) {
+          const studentId = key.split("_")[1];
+          records.push({
+            student_id: studentId,
+            course_id: currentCourseId,
+            status: value
+          });
+        }
+      }
+
+      fetch("/attendance/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ records })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || "Attendance submitted!");
+        loadStudents(currentCourseId); // Reload with updated totals
+      })
+      .catch(err => alert("Error submitting attendance."));
+    });
+  </script>
+</body>
+</html>

@@ -123,17 +123,26 @@
             fetch('/fetch-courses-data')
                 .then(response => response.json())
                 .then(data => {
-                    const tbody = document.getElementById("courses-tbody");
-                    data.forEach(course => {
-                        const row = document.createElement('tr');
-                        row.dataset.courseId = course.course_id; // Store course ID in a data attribute
-                        row.innerHTML = `
-                            <td>${course.course_id} - ${course.classes}</td>
-                            <td>${course.group_name}</td>
-                            <td>${course.subject}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
+                const tbody = document.getElementById("courses-tbody");
+                const seenCourses = new Set();
+
+data.forEach(course => {
+    if (!seenCourses.has(course.course_id)) {
+        seenCourses.add(course.course_id);
+        
+        const row = document.createElement('tr');
+        row.dataset.courseId = course.course_id;
+        row.innerHTML = `
+            <td>${course.course_id} - ${course.classes}</td>
+            <td>${course.group_name}</td>
+            <td>${course.subject}</td>
+        `;
+        tbody.appendChild(row);
+    }
+});
+
+
+
 
                     // Add click event to each row
                     const rows = document.querySelectorAll("#courses-tbody tr");

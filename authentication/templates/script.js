@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('Student added successfully');
             studentForm.reset();  // Reset the form after submission
             // Redirect to another page after successful form submission to prevent resubmission prompt
-            window.location.href = '/students-list';  // Change this URL to the page you want the user to go after submission
+            window.location.href = '/templates/students.html';  // Change this URL to the page you want the user to go after submission
         })
         .catch(error => {
             console.error('Error submitting form:', error);

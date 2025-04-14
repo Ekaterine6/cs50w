@@ -168,7 +168,7 @@ app.post('/submit-student-form', (req, res) => {
     Promise.all(insertPromises)
     .then(() => {
         console.log('All students added successfully');
-        res.redirect('/students-list'); // ✅ Correct route to serve student.html
+        res.redirect('/templates/students.html') // ✅ Correct route to serve student.html
     })
     .catch((err) => {
         console.error('Error inserting students:', err);
@@ -397,6 +397,53 @@ app.get('/fetch-students-for-course/:courseId', (req, res) => {
         res.json(results);
     });
 });
+
+// Get list of all courses (for attendance)
+app.get('/attendance/courses', (req, res) => {
+    db.query('SELECT id, group_name FROM courses', (err, results) => {
+      if (err) return res.status(500).send('Error fetching courses');
+      res.json(results);
+    });
+  });
+  
+  // Get students + attendance counts for a course
+  app.get('/attendance/students/:courseId', (req, res) => {
+    const courseId = req.params.courseId;
+    const sql = `
+      SELECT s.id, s.name, s.surname,
+        COUNT(CASE WHEN a.status = 'present' THEN 1 END) AS present_count,
+        COUNT(CASE WHEN a.status = 'absent' THEN 1 END) AS absent_count
+      FROM students s
+      LEFT JOIN attendance a ON s.id = a.student_id AND a.course_id = ?
+      WHERE s.course_id = ?
+      GROUP BY s.id
+    `;
+    db.query(sql, [courseId, courseId], (err, results) => {
+      if (err) return res.status(500).send('Error fetching students');
+      res.json(results);
+    });
+  });
+  
+  // Save attendance records
+  app.post('/attendance/submit', (req, res) => {
+    const records = req.body.records;
+    if (!records || !records.length) {
+      return res.status(400).json({ error: 'No attendance records provided' });
+    }
+  
+    const values = records.map(r => [r.student_id, r.course_id, r.status]);
+  
+    const sql = 'INSERT INTO attendance (student_id, course_id, status) VALUES ?';
+  
+    db.query(sql, [values], (err, result) => {
+      if (err) {
+        console.error("Error saving attendance:", err);
+        return res.status(500).json({ error: 'Failed to save attendance' });
+      }
+      res.json({ message: 'Attendance saved successfully' });
+    });
+  });
+  
 
 
 // Port and server start (no changes)
