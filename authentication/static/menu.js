@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <a href="/templates/settings.html">Settings</a>
         </div>
         <div id="menubtn">
-            <button class="openbtn" id="openBtn">MENU</button>
+            <button class="openbtn" id="openBtn"> ☰ </button>
         </div>
     `;
 
