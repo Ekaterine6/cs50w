@@ -26,12 +26,15 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 20px rgba(241, 250, 238, 0.6); /* Soft glow effect */
+            animation: bounce 1s infinite alternate ease-in-out;
         }
 
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+
         }
 
         th {
@@ -58,7 +61,7 @@
         }
 
         .modal-content {
-            background: white;
+            background: #4b6da0;
             padding: 20px;
             border-radius: 8px;
             max-height: 80%;
@@ -66,6 +69,8 @@
             position: relative;
             width: 90%;
             max-width: 800px;
+            box-shadow: 0 0 20px rgba(241, 250, 238, 0.6); /* Soft glow effect */
+            animation: bounce 1s infinite alternate ease-in-out;
         }
 
         .close-btn {
@@ -102,7 +107,7 @@
     <div id="studentModal" class="modal hidden">
         <div class="modal-content">
             <span id="closeModal" class="close-btn">&times;</span>
-            <h2>სტუდენტები კურსის მიხედვით</h2>
+            <h2>კურსის სტუდენტები</h2>
             <table>
                 <thead>
                     <tr>

@@ -45,6 +45,20 @@
             background-color: #e3e3e3;
             transition: 0.3s;
         }
+                /* Additional styles */
+                .busy {
+            background-color:  rgb(214, 107, 107);
+            color: white;
+        }
+
+        .free {
+            background-color: rgb(119, 205, 126);
+            color: white;
+        }
+
+        .no-data {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
@@ -72,42 +86,54 @@
     </table>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    function formatTime(start, end) {
-        if (!start && !end) return "-";
-        return `${start || "?"} - ${end || "?"}`;
-    }
-
-    fetch('/fetch-courses-data')
-        .then(response => response.json())
-        .then(data => {
-            const tbody = document.getElementById("courses-tbody");
-            const seenCourses = new Set(); // Create a set to track unique course IDs
-            
-            data.forEach(course => {
-                // Check if the course has already been added based on its course_id
-                if (!seenCourses.has(course.course_id)) {
-                    seenCourses.add(course.course_id); // Add the course_id to the set
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${course.group_name}</td>
-                        <td>${course.subject}</td>
-                        <td>${formatTime(course.monday, course.monday_end)}</td>
-                        <td>${formatTime(course.tuesday, course.tuesday_end)}</td>
-                        <td>${formatTime(course.wednesday, course.wednesday_end)}</td>
-                        <td>${formatTime(course.thursday, course.thursday_end)}</td>
-                        <td>${formatTime(course.friday, course.friday_end)}</td>
-                        <td>${formatTime(course.saturday, course.saturday_end)}</td>
-                        <td>${formatTime(course.sunday, course.sunday_end)}</td>
-                    `;
-                    tbody.appendChild(row);
+                document.addEventListener("DOMContentLoaded", function() {
+            function formatTime(start, end) {
+                if (!start && !end) {
+                    return { text: "-", className: 'free' };  // No data, marked as free
                 }
-            });
-        })
-        .catch(error => console.error('Error, unable to get students:', error));
-});
+                return {
+                    text: `${start || "?"} - ${end || "?"}`,
+                    className: 'busy'  // Has data, marked as busy
+                };
+            }
 
+            fetch('/fetch-courses-data')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("courses-tbody");
+                    const seenCourses = new Set(); // Create a set to track unique course IDs
+                    
+                    data.forEach(course => {
+                        // Check if the course has already been added based on its course_id
+                        if (!seenCourses.has(course.course_id)) {
+                            seenCourses.add(course.course_id); // Add the course_id to the set
+
+                            const row = document.createElement('tr');
+                            const monday = formatTime(course.monday, course.monday_end);
+                            const tuesday = formatTime(course.tuesday, course.tuesday_end);
+                            const wednesday = formatTime(course.wednesday, course.wednesday_end);
+                            const thursday = formatTime(course.thursday, course.thursday_end);
+                            const friday = formatTime(course.friday, course.friday_end);
+                            const saturday = formatTime(course.saturday, course.saturday_end);
+                            const sunday = formatTime(course.sunday, course.sunday_end);
+
+                            row.innerHTML = `
+                                <td>${course.group_name}</td>
+                                <td>${course.subject}</td>
+                                <td class="${monday.className}">${monday.text}</td>
+                                <td class="${tuesday.className}">${tuesday.text}</td>
+                                <td class="${wednesday.className}">${wednesday.text}</td>
+                                <td class="${thursday.className}">${thursday.text}</td>
+                                <td class="${friday.className}">${friday.text}</td>
+                                <td class="${saturday.className}">${saturday.text}</td>
+                                <td class="${sunday.className}">${sunday.text}</td>
+                            `;
+                            tbody.appendChild(row);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error, unable to get students:', error));
+        });
       </script>
       
 </body>

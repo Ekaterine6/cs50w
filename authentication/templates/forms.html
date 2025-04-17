@@ -14,7 +14,7 @@
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 text-align: left;
                 width: 100%;
-                max-width: 400px; /* Maximum width */
+                max-width: 400px;
                 height: 100%;
                 overflow: hidden;
             }
@@ -108,41 +108,40 @@
                 <div id="week">
                     <div class="formss">
                         <label for="monday">ორშაბათი</label>
-                        <input type="time" id="monday" name="monday">
-                        <input type="time" id="monday_end" name="monday_end">
+                        <input type="text" id="monday" name="monday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="monday_end" name="monday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">                        
                     </div>
                     <div class="formss">
                         <label for="tuesday">სამშაბათი</label>
-                        <input type="time" id="tuesday" name="tuesday">
-                        <input type="time" id="tuesday_end" name="tuesday_end">
+                        <input type="text" id="tuesday" name="tuesday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="tuesday_end" name="tuesday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$"> 
                     </div>
                     <div class="formss">
                         <label for="wednesday">ოთხშაბათი</label>
-                        <input type="time" id="wednesday" name="wednesday">
-                        <input type="time" id="wednesday_end" name="wednesday_end">
+                        <input type="text" id="wednesday" name="wednesday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="wednesday_end" name="wednesday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$"> 
                     </div>
                     <div class="formss">
                         <label for="thursday">ხუთშაბათი</label>
-                        <input type="time" id="thursday" name="thursday">
-                        <input type="time" id="thursday_end" name="thursday_end">
+                        <input type="text" id="thursday" name="thursday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="thursday_end" name="thursday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$"> 
                     </div>
                     <div class="formss">
                         <label for="friday">პარასკევი</label>
-                        <input type="time" id="friday" name="friday">
-                        <input type="time" id="friday_end" name="friday_end">
+                        <input type="text" id="friday" name="friday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="friday_end" name="friday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$"> 
                     </div>
                     <div class="formss">
                         <label for="saturday">შაბათი</label>
-                        <input type="time" id="saturday" name="saturday">
-                        <input type="time" id="saturday_end" name="saturday_end">
+                        <input type="text" id="saturday" name="saturday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="saturday_end" name="saturday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$"> 
                     </div>
                     <div class="formss">
                         <label for="sunday">კვირა</label>
-                        <input type="time" id="sunday" name="sunday">
-                        <input type="time" id="sunday_end" name="sunday_end">
+                        <input type="text" id="sunday" name="sunday" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$">
+                        <input type="text" id="sunday_end" name="sunday_end" placeholder="00:00" pattern="^([01]\d|2[0-3]):([0-5]\d)$"> 
                     </div>
                 </div>
-                
                 <button class="submit-btn" type="submit">კურსის შექმნა</button>
             </form>
         </div>

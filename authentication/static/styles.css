@@ -103,6 +103,9 @@ h2 {
     border: none;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
     transition: box-shadow 0.3s ease, transform 0.2s ease;
+    position: fixed;
+    top: 30px;
+    left: 20px;
   }
   
   .openbtn:hover {
