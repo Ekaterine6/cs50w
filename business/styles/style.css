@@ -1,3 +1,4 @@
+
 /* ─── Navigation Bar ─── */
 .container.nav {
   z-index: 9999;
@@ -275,6 +276,7 @@ body:not(.floating-home) .scroll-down {
 .section img:hover {
   transform: scale(1.05);
 }
+
 .text-left {
   text-align: left;
   margin-right: 20px;
