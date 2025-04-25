@@ -348,7 +348,7 @@ app.post('/check-verification', (req, res) => {
     const userId = req.session.userId;
     const phone = req.session.phone;
     if (!userId || !phone) {
-        return res.status(401).send('Session expired. Please request a new code.');
+        return res.status(401).send('გთხოვთ ახალი კოდი მოითხოვეთ.');
     }
 
     client.verify.services(process.env.TWILIO_VERIFY_SERVICE_SID)
@@ -370,11 +370,11 @@ app.post('/check-verification', (req, res) => {
                     // Clear session variables after a successful password update.
                     req.session.userId = null;
                     req.session.phone = null;
-                    res.send('Password updated successfully!');
+                    res.send('პაროლი განახლებულია!');
                 });
             } else {
                 res.status(400).send({
-                    message: 'Invalid verification code or code expired. Please try again.',
+                    message: 'არასწორი კოდი გთხოვთ თავიდან ცადეთ.',
                     status: verification_check.status
                 });
             }
@@ -443,7 +443,7 @@ app.get('/attendance/courses', (req, res) => {
   app.post('/attendance/submit', (req, res) => {
     const records = req.body.records;
     if (!records || !records.length) {
-      return res.status(400).json({ error: 'No attendance records provided' });
+      return res.status(400).json({ error: 'აღრიცხვის ინფორმაცია არაა ჩაწერილი.' });
     }
   
     const values = records.map(r => [r.student_id, r.course_id, r.status]);
@@ -453,9 +453,9 @@ app.get('/attendance/courses', (req, res) => {
     db.query(sql, [values], (err, result) => {
       if (err) {
         console.error("Error saving attendance:", err);
-        return res.status(500).json({ error: 'Failed to save attendance' });
+        return res.status(500).json({ error: 'აღრიცხვა არაა შენახული.' });
       }
-      res.json({ message: 'Attendance saved successfully' });
+      res.json({ message: 'აღრიცხვა შენახულია!.' });
     });
   });
   
