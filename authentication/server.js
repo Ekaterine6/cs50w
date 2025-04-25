@@ -261,6 +261,21 @@ app.delete('/delete-course-history', (req, res) => {
     });
 });
 
+app.delete('/delete-student/:id', (req, res) => {
+    const studentId = req.params.id;
+    const query = 'DELETE FROM students WHERE id = ?';
+
+    db.query(query, [studentId], (error, results) => {  // ✅ FIXED
+        if (error) {
+            console.error('სტუდენტის წაშლა არ განხორციელდა:', error);
+            return res.status(500).send('Server error');
+        }
+        res.status(200).send('სტუდენტი წაშლილია');
+    });
+});
+
+
+
 // Endpoint for starting a verification (no changes)
 app.post('/start-verification', (req, res) => {
     const { email, phone } = req.body;

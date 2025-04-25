@@ -115,55 +115,51 @@
                         <th>გვარი</th>
                         <th>Email</th>
                         <th>ტელეფონი</th>
+                        <th>ქმედება</th>
                     </tr>
                 </thead>
                 <tbody id="studentTableBody"></tbody>
             </table>
         </div>
     </div>
-    
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             fetch('/fetch-courses-data')
                 .then(response => response.json())
                 .then(data => {
-                const tbody = document.getElementById("courses-tbody");
-                const seenCourses = new Set();
-
-data.forEach(course => {
-    if (!seenCourses.has(course.course_id)) {
-        seenCourses.add(course.course_id);
-        
-        const row = document.createElement('tr');
-        row.dataset.courseId = course.course_id;
-        row.innerHTML = `
-            <td>${course.course_id} - ${course.classes}</td>
-            <td>${course.group_name}</td>
-            <td>${course.subject}</td>
-        `;
-        tbody.appendChild(row);
-    }
-});
-
-
-
-
+                    const tbody = document.getElementById("courses-tbody");
+                    const seenCourses = new Set();
+    
+                    data.forEach(course => {
+                        if (!seenCourses.has(course.course_id)) {
+                            seenCourses.add(course.course_id);
+                            
+                            const row = document.createElement('tr');
+                            row.dataset.courseId = course.course_id;
+                            row.innerHTML = `
+                                <td>${course.course_id} - ${course.classes}</td>
+                                <td>${course.group_name}</td>
+                                <td>${course.subject}</td>
+                            `;
+                            tbody.appendChild(row);
+                        }
+                    });
+    
                     // Add click event to each row
                     const rows = document.querySelectorAll("#courses-tbody tr");
                     rows.forEach(row => {
                         row.addEventListener("click", function() {
                             const courseId = this.dataset.courseId;
-
+    
                             fetch(`/fetch-students-for-course/${courseId}`)
                                 .then(response => response.json())
                                 .then(students => {
                                     const studentTableBody = document.getElementById("studentTableBody");
                                     const studentModal = document.getElementById("studentModal");
                                     const closeModal = document.getElementById("closeModal");
-
+    
                                     studentTableBody.innerHTML = ""; // Clear previous student data
-
+    
                                     if (students.length > 0) {
                                         students.forEach(student => {
                                             const row = document.createElement("tr");
@@ -172,20 +168,46 @@ data.forEach(course => {
                                                 <td>${student.surname}</td>
                                                 <td>${student.email}</td>
                                                 <td>${student.phone}</td>
+                                                <td><button class="delete-btn" data-id="${student.id}">წაშლა</button></td>
                                             `;
                                             studentTableBody.appendChild(row);
                                         });
+    
+                                        // Attach delete event listeners AFTER rendering
+                                        document.querySelectorAll(".delete-btn").forEach(button => {
+                                            button.addEventListener("click", function(e) {
+                                                e.stopPropagation(); // Prevent row click
+                                                const studentId = this.dataset.id;
+                                                if (confirm("ნამდვილად გსურთ სტუდენტის წაშლა?")) {
+                                                    fetch(`/delete-student/${studentId}`, {
+                                                        method: 'DELETE'
+                                                    })
+                                                    .then(response => {
+                                                        if (response.ok) {
+                                                            this.closest("tr").remove(); // Remove from table
+                                                        } else {
+                                                            alert("სტუდენტის წაშლა ვერ მოხერხდა.");
+                                                        }
+                                                    })
+                                                    .catch(err => {
+                                                        console.error("Error deleting student:", err);
+                                                        alert("შეცდომა წაშლის დროს.");
+                                                    });
+                                                }
+                                            });
+                                        });
+    
                                         studentModal.classList.remove("hidden"); // Show the modal
                                     } else {
-                                        studentTableBody.innerHTML = "<tr><td colspan='4'>ეს კურსი არ შეიცავს სტუდენტებს.</td></tr>";
+                                        studentTableBody.innerHTML = "<tr><td colspan='5'>ეს კურსი არ შეიცავს სტუდენტებს.</td></tr>";
                                         studentModal.classList.remove("hidden");
                                     }
-
+    
                                     // Close the modal when the close button is clicked
                                     closeModal.addEventListener("click", () => {
                                         studentModal.classList.add("hidden");
                                     });
-
+    
                                     // Close the modal when clicking outside the modal content area
                                     window.addEventListener("click", (e) => {
                                         if (e.target === studentModal) {
@@ -200,5 +222,6 @@ data.forEach(course => {
                 .catch(error => console.error('Error, unable to get courses:', error));
         });
     </script>
+    
 </body>
 </html>
