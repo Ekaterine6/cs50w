@@ -1,4 +1,3 @@
-
 /* ─── Navigation Bar ─── */
 .container.nav {
   z-index: 9999;
@@ -60,7 +59,7 @@ body:not(.floating-home) main {
 .section-1 {
   margin-top: 80px;
   text-align: center;
-  padding: 80px 0;
+  padding: 50px 20px;
 }
 
 .section-2, .section-3, .section-4 {
@@ -71,13 +70,13 @@ body:not(.floating-home) main {
 .section-1 h1 {
   font-size: 3rem;
   color: #fff;
+  margin-bottom: 10px; /* Reduced spacing between title and paragraph */
 }
 
 .section-1 p {
   font-size: 1.2rem;
   color: #bbb;
 }
-
 
 /* ─── Buttons ─── */
 button.cta-btn, .cta-btn {
@@ -221,7 +220,7 @@ body:not(.floating-home) .scroll-down {
 }
 
 .section-content {
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 8px 20px rgb(174, 170, 170);
   padding: 30px;
   border-radius: 10px;
 }
@@ -303,5 +302,22 @@ body:not(.floating-home) .scroll-down {
   .float-btn {
     padding: 12px 24px;
     font-size: 1rem;
+  }
+
+  .section-1 {
+    padding: 40px 15px; /* Adjust padding for mobile */
+  }
+
+  .section-1 h1 {
+    font-size: 2.5rem; /* Reduce the size of the heading for mobile */
+    margin-bottom: 8px; /* Reduce the space between title and paragraph */
+  }
+
+  .section-1 p {
+    font-size: 1rem; /* Smaller text for mobile */
+  }
+
+  .section img {
+    width: 90%; /* Adjust the image size for mobile */
   }
 }
