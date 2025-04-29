@@ -78,32 +78,6 @@ body:not(.floating-home) main {
   color: #bbb;
 }
 
-/* ─── Contact Form ─── */
-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-label {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-}
-
-input, textarea {
-  font-size: 1.1rem;
-  padding: 10px;
-  margin-bottom: 15px;
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 5px;
-}
-
-input::placeholder, textarea::placeholder {
-  color: #bbb;
-}
 
 /* ─── Buttons ─── */
 button.cta-btn, .cta-btn {

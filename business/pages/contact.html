@@ -6,6 +6,125 @@
   <title>Contact - TechFluence Agency</title>
   <link rel="stylesheet" href="../styles/style.css" />
   <link rel="icon" type="image/png" href="../styles/faviconline.jpg" />
+  <style>
+    /* General layout fixes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 80px);
+      padding: 40px;
+    }
+
+    .section-1 {
+      flex-direction: column;
+      text-align: center;
+      height: 30vh;
+    }
+
+    .section-2 {
+      height: 60vh;
+    }
+
+    .form-container {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      border: 1px solid #333;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    form label {
+      font-weight: bold;
+    }
+
+    form input,
+    form textarea {
+      background-color: #222;
+      color: white;
+      border: 1px solid #555;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      border-color: white;
+      outline: none;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    }
+
+    .cta-btn {
+      background-color: white;
+      color: black;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .cta-btn:hover {
+      background-color: black;
+      color: white;
+      border: 1px solid white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: black;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+    }
+
+    .nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .logo {
+      height: 40px;
+    }
+  </style>
 </head>
 
 <body>
@@ -23,22 +142,15 @@
       </ul>
     </nav>
   </div>
-  
 
-  <!-- Hero Section for Contact Page -->
   <section class="section section-1">
-    <div class="section-content">
       <h1>Contact Us</h1>
       <p>If you have any questions or want to collaborate, feel free to reach out!</p>
-    </div>
   </section>
 
-  <!-- Contact Form Section -->
   <section class="section section-2">
-    <div class="section-content">
-      <!-- Updated Form with Formspree -->
+    <div class="form-container">
       <form action="https://formspree.io/f/mwpoeqdl" method="POST">
-
         <label for="name">Your Name</label>
         <input type="text" id="name" name="name" placeholder="Enter your name" required />
 
@@ -53,7 +165,6 @@
     </div>
   </section>
 
-  <!-- Footer Section -->
   <footer>
     <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
   </footer>
