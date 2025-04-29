@@ -8,13 +8,13 @@
         <style>
 
             .add_course {
-                background-color: #ffffff;
+                background: #7fc3ed;
                 padding: 15px 20px;
                 border-radius: 12px;
                 box-shadow: 0 0 20px rgba(241, 250, 238, 0.6); 
                 text-align: left;
                 width: 100%;
-                max-width: 400px;
+                max-width: 600px;
                 height: 100%;
                 overflow: hidden;
             }
@@ -34,7 +34,7 @@
             }
 
             input {
-                width: 100%;
+                width: 80%;
                 padding: 8px;
                 margin: 5px 0 10px;
                 border-radius: 8px;
@@ -104,6 +104,12 @@
                 <label for="subject">საგანი:</label>
                 <input id="subject" name="subject" placeholder="მაგ: მათემატიკა" required>
 
+                <select id="teacher" name="teacher" required>
+                    <option value="">--- Select Teacher ---</option>
+                </select>
+                
+
+
                 <label for="week">კვირის განრიგი:</label>
                 <div id="week">
                     <div class="formss">
@@ -145,7 +151,23 @@
                 <button class="submit-btn" type="submit">კურსის შექმნა</button>
             </form>
         </div>
+        <script>
+            fetch('/fetch-teachers')
+                .then(response => response.json())
+                .then(teachers => {
+                    const teacherSelect = document.getElementById('teacher');
+                    teachers.forEach(teacher => {
+                        const option = document.createElement('option');
+                        option.value = teacher.id;
+                        option.textContent = `${teacher.firstname} ${teacher.lastname}`;
+                        teacherSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading teachers:', error);
+                });
+        </script>
+        
 
-        <script src="script.js" defer></script>
     </body>
 </html>

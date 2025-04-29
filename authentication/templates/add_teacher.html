@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>სტუდენტების დამატება</title>
+    <title>ლექტორის დამატება</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
     <style>
-        .students-container {
+        .teachers-container {
             background: #7fc3ed;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(241, 250, 238, 0.6);
+            box-shadow: 0 0 20px rgba(241, 250, 238, 0.6); 
             width: 100%;
             max-width: 500px;
             margin: 50px auto;
         }
 
-        .student {
+        .teacher {
             margin-bottom: 20px;
         }
 
@@ -30,8 +30,7 @@
 
         input[type="text"],
         input[type="email"],
-        input[type="tel"],
-        select {
+        input[type="tel"] {
             width: 100%;
             padding: 12px;
             font-size: 14px;
@@ -42,12 +41,13 @@
         }
 
         select {
-            appearance: none; /* Removes default dropdown arrow */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background: url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2020%2020%22%3E%3Cpath%20fill=%22none%22%20d=%22M5%2010l5%205%205-5%22/%3E%3C/svg%3E%0A') no-repeat right 10px center;
-            background-size: 12px;
-            padding-right: 30px; /* Make space for custom arrow */
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
         }
 
         input[type="text"]:focus,
@@ -86,24 +86,24 @@
 </head>
 <body>
     <div>
-        <h2>სტუდენტების დამატება</h2>
+        <h2>ლექტორის დამატება</h2>
         <div id="menu-container"></div>
         <script src="/static/menu.js"></script>
 
-        <form id="student_form" action="/submit-student-form" method="post">
-            <div id="students_container" class="students-container">
-                <div class="student">
+        <form id="teacher_form" action="/submit-teacher-form" method="post">
+            <div id="teachers_container" class="teachers-container">
+                <div class="teacher">
                     <label>სახელი:</label>
-                    <input type="text" name="students[0][name]" required placeholder="სახელი"><br>
+                    <input type="text" name="teacher[0][firstname]" required placeholder="სახელი"><br>
 
                     <label>გვარი:</label>
-                    <input type="text" name="students[0][surname]" required placeholder="გვარი"><br>
+                    <input type="text" name="teacher[0][lastname]" required placeholder="გვარი"><br>
 
                     <label>Email:</label>
-                    <input type="email" name="students[0][email]" required placeholder="email"><br>
+                    <input type="email" name="teacher[0][email]" required placeholder="email"><br>
 
                     <label>მობილური ნომერი:</label>
-                    <input type="tel" name="students[0][phone]" required placeholder="+995 000 00 00 00"><br>
+                    <input type="tel" name="teacher[0][phone]" required placeholder="+995 000 00 00 00"><br>
 
                     <label for="courseSelect">აირჩიე ჯგუფი:</label>
                     <select id="courseSelect" name="course_id">
@@ -131,6 +131,42 @@
                     });
                 })
                 .catch(error => console.error('Error fetching courses:', error));
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const teacherForm = document.querySelector('#teacher_form');
+            
+            teacherForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const teacherData = {
+                    teacher_firstname: document.querySelector('[name="teacher[0][firstname]"]').value,
+                    teacher_lastname: document.querySelector('[name="teacher[0][lastname]"]').value,
+                    teacher_email: document.querySelector('[name="teacher[0][email]"]').value,
+                    teacher_phone: document.querySelector('[name="teacher[0][phone]"]').value,
+                    course_id: document.querySelector('[name="course_id"]').value,
+                };
+
+                try {
+                    const response = await fetch('/submit-teacher-form', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(teacherData),
+                    });
+
+                    if (response.ok) {
+                        alert('Teacher added successfully!');
+                        teacherForm.reset();
+                    } else {
+                        alert('Error adding teacher');
+                    }
+                } catch (err) {
+                    console.error('Error:', err);
+                    alert('Error adding teacher');
+                }
+            });
         });
     </script>
 </body>

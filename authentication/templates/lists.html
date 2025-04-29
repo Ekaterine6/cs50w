@@ -9,7 +9,6 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            
         }
 
         h2 {
@@ -45,9 +44,10 @@
             background-color: #e3e3e3;
             transition: 0.3s;
         }
-                /* Additional styles */
-                .busy {
-            background-color:  rgb(214, 107, 107);
+
+        /* Additional styles */
+        .busy {
+            background-color: rgb(214, 107, 107);
             color: white;
         }
 
@@ -61,16 +61,18 @@
         }
     </style>
 </head>
+
 <body>
     <h2>კურსები და სტუდენტები</h2>
     <div id="menu-container"></div> <!-- Placeholder for the menu -->
     <script src="/static/menu.js"></script>
-    
+
     <table id="courses-table">
         <thead>
             <tr>
                 <th>ჯგუფის დასახელება</th>
                 <th>საგანი</th>
+                <th>ლექტორი</th>
                 <th>ორშაბათი</th>
                 <th>სამშაბათი</th>
                 <th>ოთხშაბათი</th>
@@ -80,13 +82,11 @@
                 <th>კვირა</th>
             </tr>
         </thead>
-        <tbody id="courses-tbody">
-            <!-- rows added here -->
-        </tbody>
+        <tbody id="courses-tbody"></tbody> <!-- Add this tbody element -->
     </table>
-
+    
     <script>
-                document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
             function formatTime(start, end) {
                 if (!start && !end) {
                     return { text: "-", className: 'free' };  // No data, marked as free
@@ -96,45 +96,51 @@
                     className: 'busy'  // Has data, marked as busy
                 };
             }
-
+            
             fetch('/fetch-courses-data')
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.getElementById("courses-tbody");
-                    const seenCourses = new Set(); // Create a set to track unique course IDs
-                    
-                    data.forEach(course => {
-                        // Check if the course has already been added based on its course_id
-                        if (!seenCourses.has(course.course_id)) {
-                            seenCourses.add(course.course_id); // Add the course_id to the set
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // This will show the response from your backend
+                const tbody = document.getElementById("courses-tbody");
+                const seenCourses = new Set();
+                
+                data.forEach(course => {
+                    if (!seenCourses.has(course.course_id)) {
+                        seenCourses.add(course.course_id);
 
-                            const row = document.createElement('tr');
-                            const monday = formatTime(course.monday, course.monday_end);
-                            const tuesday = formatTime(course.tuesday, course.tuesday_end);
-                            const wednesday = formatTime(course.wednesday, course.wednesday_end);
-                            const thursday = formatTime(course.thursday, course.thursday_end);
-                            const friday = formatTime(course.friday, course.friday_end);
-                            const saturday = formatTime(course.saturday, course.saturday_end);
-                            const sunday = formatTime(course.sunday, course.sunday_end);
+                        const row = document.createElement('tr');
+                        const monday = formatTime(course.monday, course.monday_end);
+                        const tuesday = formatTime(course.tuesday, course.tuesday_end);
+                        const wednesday = formatTime(course.wednesday, course.wednesday_end);
+                        const thursday = formatTime(course.thursday, course.thursday_end);
+                        const friday = formatTime(course.friday, course.friday_end);
+                        const saturday = formatTime(course.saturday, course.saturday_end);
+                        const sunday = formatTime(course.sunday, course.sunday_end);
 
-                            row.innerHTML = `
-                                <td>${course.group_name}</td>
-                                <td>${course.subject}</td>
-                                <td class="${monday.className}">${monday.text}</td>
-                                <td class="${tuesday.className}">${tuesday.text}</td>
-                                <td class="${wednesday.className}">${wednesday.text}</td>
-                                <td class="${thursday.className}">${thursday.text}</td>
-                                <td class="${friday.className}">${friday.text}</td>
-                                <td class="${saturday.className}">${saturday.text}</td>
-                                <td class="${sunday.className}">${sunday.text}</td>
-                            `;
-                            tbody.appendChild(row);
-                        }
-                    });
-                })
-                .catch(error => console.error('Error, unable to get students:', error));
+                        const teacherName = course.firstname && course.lastname 
+                            ? `${course.firstname} ${course.lastname}` 
+                            : "No teacher assigned";
+
+                        row.innerHTML = `
+                            <td>${course.group_name}</td>
+                            <td>${course.subject}</td>
+                            <td class="${!course.firstname || !course.lastname ? 'no-data' : ''}">
+                                ${teacherName}
+                            </td>
+                            <td class="${monday.className}">${monday.text}</td>
+                            <td class="${tuesday.className}">${tuesday.text}</td>
+                            <td class="${wednesday.className}">${wednesday.text}</td>
+                            <td class="${thursday.className}">${thursday.text}</td>
+                            <td class="${friday.className}">${friday.text}</td>
+                            <td class="${saturday.className}">${saturday.text}</td>
+                            <td class="${sunday.className}">${sunday.text}</td>
+                        `;
+                        tbody.appendChild(row);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching courses:', error));
         });
-      </script>
-      
+    </script>
 </body>
 </html>

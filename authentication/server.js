@@ -89,6 +89,7 @@ app.post('/submit-course-form', (req, res) => {
         group_name,
         classes,
         subject,
+        teacher_id,
         monday,
         monday_end,
         tuesday,
@@ -107,14 +108,15 @@ app.post('/submit-course-form', (req, res) => {
 
     const courseSql = `
         INSERT INTO courses 
-        (group_name, classes, subject, monday, monday_end, tuesday, tuesday_end, wednesday, wednesday_end, thursday, thursday_end, friday, friday_end, saturday, saturday_end, sunday, sunday_end)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (group_name, classes, subject, teacher_id, monday, monday_end, tuesday, tuesday_end, wednesday, wednesday_end, thursday, thursday_end, friday, friday_end, saturday, saturday_end, sunday, sunday_end)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     
     db.query(courseSql, [
         group_name || null,
         classes,
         subject,
+        teacher_id,
         monday || null,
         monday_end || null,
         tuesday || null,
@@ -177,45 +179,35 @@ app.post('/submit-student-form', (req, res) => {
 
 });
 
-
-// Route to fetch courses and students (no changes)
+// Route to fetch courses and teacher data
 app.get('/fetch-courses-data', (req, res) => {
+    // SQL query to fetch course data and teacher names
     const sql = `
         SELECT c.id AS course_id,
                c.group_name,
-               c.classes,
                c.subject,
-               c.monday,
-               c.monday_end,
-               c.tuesday,
-               c.tuesday_end,
-               c.wednesday,
-               c.wednesday_end,
-               c.thursday,
-               c.thursday_end,
-               c.friday,
-               c.friday_end,
-               c.saturday,
-               c.saturday_end,
-               c.sunday,
-               c.sunday_end,
-               s.id AS student_id,
-               s.name,
-               s.surname,
-               s.email,
-               s.phone
+               CONCAT(t.firstname, ' ', t.lastname) AS teacher,
+               c.monday, c.monday_end,
+               c.tuesday, c.tuesday_end,
+               c.wednesday, c.wednesday_end,
+               c.thursday, c.thursday_end,
+               c.friday, c.friday_end,
+               c.saturday, c.saturday_end,
+               c.sunday, c.sunday_end
         FROM courses c
-        LEFT JOIN students s ON c.id = s.course_id
-        ORDER BY c.id, s.id
+        LEFT JOIN teachers t ON c.teacher_id = t.id
     `;
+    
     db.query(sql, (err, results) => {
         if (err) {
-            console.error('Error fetching courses and students:', err);
-            return res.redirect('/error.html');
+            console.error('Error fetching courses: ' + err.stack);
+            return res.status(500).send('Server error');
         }
+        // Send the results back to the frontend as JSON
         res.json(results);
     });
 });
+
 
 app.get('/get-course-list', (req, res) => {
     db.query('SELECT id, group_name, subject FROM courses', (err, results) => {
@@ -385,15 +377,38 @@ app.post('/check-verification', (req, res) => {
         });
 });
 
+
 app.get('/fetch-courses-data', (req, res) => {
-    connection.query('SELECT * FROM courses', (err, results) => {
+    const query = `
+        SELECT 
+            courses.id AS course_id, 
+            courses.group_name, 
+            courses.subject, 
+            teachers.firstname, 
+            teachers.lastname, 
+            courses.monday, courses.monday_end, 
+            courses.tuesday, courses.tuesday_end, 
+            courses.wednesday, courses.wednesday_end, 
+            courses.thursday, courses.thursday_end, 
+            courses.friday, courses.friday_end, 
+            courses.saturday, courses.saturday_end, 
+            courses.sunday, courses.sunday_end
+        FROM courses
+        LEFT JOIN teachers ON courses.teacher_id = teachers.id
+    `;
+
+    connection.query(query, (err, results) => {
         if (err) {
             console.error(err);
-            return res.status(500).json({ error: 'Failed to fetch courses' });
+            return res.status(500).send('Server error');
         }
+        
+        console.log(results);  // Log the results to see the actual data returned
         res.json(results);
     });
 });
+
+
 
 app.get('/fetch-students-for-course/:courseId', (req, res) => {
     const { courseId } = req.params;
@@ -459,6 +474,35 @@ app.get('/attendance/courses', (req, res) => {
     });
   });
   
+  app.post('/add-teacher', (req, res) => {
+    const { teacher_firstname, teacher_lastname, teacher_email, teacher_phone } = req.body;
+
+    // Validate input
+    if (!teacher_firstname || !teacher_lastname || !teacher_email || !teacher_phone) {
+        return res.status(400).send('All fields are required');
+    }
+
+    const query = 'INSERT INTO teachers (firstname, lastname, email, phone) VALUES (?, ?, ?, ?)';
+    db.query(query, [teacher_firstname, teacher_lastname, teacher_email, teacher_phone], (err, results) => {
+        if (err) {
+            console.error('Error inserting teacher data:', err);
+            return res.status(500).send('Error adding teacher');
+        }
+        res.send('Teacher added successfully');
+    });
+});
+
+// Fetch all teachers
+app.get('/fetch-teachers', (req, res) => {
+    db.query('SELECT id, firstname, lastname FROM teachers', (err, results) => {
+        if (err) {
+            console.error('Error fetching teachers:', err);
+            return res.status(500).send('Error fetching teachers.');
+        }
+        res.json(results);
+    });
+});
+
 
 
 // Port and server start (no changes)

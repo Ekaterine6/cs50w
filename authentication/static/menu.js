@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <a href="javascript:void(0)" class="closebtn" id="closeBtn">x</a>
             <a href="/index.html">მთავარი</a>
             <a href="/templates/attendance.html">აღრიცხვა</a>
+            <a href="/templates/add_teacher.html">ლექტორი</a>
             <a href="/templates/forms.html">ჯგუფესი შექმნა</a>
             <a href="/templates/add_students.html">სტუდენტების დამატება</a>
             <a href="/templates/lists.html">განრიგი</a>
