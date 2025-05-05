@@ -49,19 +49,17 @@ def create_entry(request):
     if request.method == "POST":
         title = request.POST.get("q_title_entry")
         content = request.POST.get("q_entry")
-        util.save_entry(title, content)
-        filename = f"entries/{title}.md"
+
         if not title or not content:
             return render(request, "encyclopedia/error.html", {"error_mes": "form is not filled out."})
-
-        if default_storage.exists(filename):
-            default_storage.delete(filename)
-            return render(request, "encyclopedia/error.html", {"error_mes": "entry already exists."})
-
-        default_storage.save(filename)
+        
+        if util.get_entry(title):
+            return render(request, "encyclopedia/error.html", {"error_mes": "entry exists."})
+        
+        util.save_entry(title, content)
         return render(request, "encyclopedia/entry.html", {
             "title": title,
-            "content": content
+            "entry": content
         })
     return render(request, "encyclopedia/create_entry.html")
 
@@ -70,12 +68,15 @@ def edit_entry(request, title):
     entry = util.get_entry(title)
 
     if request.method == "POST":
-        changed_entry = request.POST.get("entry", "")
+        edited_entry = request.POST.get("entry", "")
 
-        util.save_entry(title, changed_entry)
-        return render(request, "entry", title=title)
+        util.save_entry(title, edited_entry)
+        return render(request, "encyclopedia/entry.html", {
+            "title" : title,
+            "entry": edited_entry
+        })
 
-    return render(request, "encyclopedia/entry.html", {
+    return render(request, "encyclopedia/edit_entry.html", {
         "title": title,
-        "entry": entry if entry else "" 
+        "entry": entry 
     })
