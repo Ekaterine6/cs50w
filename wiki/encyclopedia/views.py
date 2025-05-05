@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.core.files.storage import default_storage
 
-
+import random 
 from . import util
 
 
@@ -79,4 +79,18 @@ def edit_entry(request, title):
     return render(request, "encyclopedia/edit_entry.html", {
         "title": title,
         "entry": entry 
+    })
+
+# Random Page: Clicking “Random Page” in the sidebar should take user to a random encyclopedia entry.
+def random_page(request):
+    entries = util.list_entries()
+    if not entries: 
+        return render(request, "encyclopedia/error.html", {"error_mes": "no entries."})
+    
+    random_entry = random.choice(entries) # random.choice() from python documentary under random
+    
+    entry_content = util.get_entry(random_entry)
+    return render(request, "encyclopedia/random_page.html", {
+        "title": random_entry,
+        "entry" : entry_content
     })
