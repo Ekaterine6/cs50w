@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.core.files.storage import default_storage
 
 import random 
+import markdown2
+
 from . import util
 
 
@@ -16,9 +18,12 @@ def entry(request, entry):
     text = util.get_entry(entry)
     if text is None:
        return render(request, "encyclopedia/error.html", {"error_mes": "entry does not exist"})
+    
+    mark_content = markdown2.markdown(text)
+
     return render(request, "encyclopedia/entry.html", {
     # required - The title of the page should include the name of the entry.
-       "entry": text,
+       "entry": mark_content,
        "title": entry 
     })
 
