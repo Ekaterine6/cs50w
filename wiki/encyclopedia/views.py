@@ -62,8 +62,10 @@ def create_entry(request):
         if not title or not content:
             return render(request, "encyclopedia/error.html", {"error_mes": "form is not filled out."})
         
-        # not submitting data until certain tath it doesn't exist 
-        if util.get_entry(title):
+        # not submitting data until certain tath it doesn't exist .... ealized i made a mistake after submitting 
+        # i realized i was still letting the user create a new entry even if it exsited, because
+        # i didn't use "is not none" to make sure the entry is really none before submitting.
+        if util.get_entry(title) is not None:
             return render(request, "encyclopedia/error.html", {"error_mes": "entry exists."})
   
         util.save_entry(title, content)
