@@ -13,6 +13,7 @@ def index(request):
     })
 
 def entry(request, entry):
+    #project demand
     # using the appropriate util function to retrieve the title and the entry text - The view should get the content of the encyclopedia entry by calling 
     # the appropriate util function.
     text = util.get_entry(entry)
@@ -23,6 +24,7 @@ def entry(request, entry):
 
     return render(request, "encyclopedia/entry.html", {
     # required - The title of the page should include the name of the entry.
+    # variable entry holds the title of the entry thats why the title itself is the entry
        "entry": mark_content,
        "title": entry 
     })
@@ -34,7 +36,8 @@ def search(request):
         qsearch = request.POST.get("q")
         if not qsearch:
             return render(request, "encyclopedia/error.html", {"error_mes": "please fill out the field"})
-    
+        
+        #using the same method as i did in entry to retrieve data using get_entry and displaying it 
         qentry = util.get_entry(qsearch)
         if qentry is None:
             return render(request, "encyclopedia/error.html", {"error_mes": "Page not found"})
@@ -42,7 +45,7 @@ def search(request):
             "entry": qentry,
             "title": qsearch
         })
-    # search results page that displays a list of all encyclopedia entries that have the query as a substring.
+    # search results page that displays a list of all encyclopedia entries that have the query as a substring. - project demand 
     entries = util.list_entries
     if entries is util.list_entries:
         return render(request, "encyclopedia/entry.html")
@@ -58,9 +61,10 @@ def create_entry(request):
         if not title or not content:
             return render(request, "encyclopedia/error.html", {"error_mes": "form is not filled out."})
         
+        # not submitting data until certain tath it doesn't exist 
         if util.get_entry(title):
             return render(request, "encyclopedia/error.html", {"error_mes": "entry exists."})
-        
+        # directing user to the display page
         util.save_entry(title, content)
         return render(request, "encyclopedia/entry.html", {
             "title": title,
@@ -68,13 +72,18 @@ def create_entry(request):
         })
     return render(request, "encyclopedia/create_entry.html")
 
-
+# required - On each entry page, the user should be able to click a link to be taken 
+# to a page where the user can edit that entry’s Markdown content in a textarea
 def edit_entry(request, title):
     entry = util.get_entry(title)
 
     if request.method == "POST":
-        edited_entry = request.POST.get("entry", "")
+        # recieving the edited entry and checking it 
+        edited_entry = request.POST.get("entry")
+        if edited_entry is None:
+            edited_entry = ""
 
+        # saving the edited entry
         util.save_entry(title, edited_entry)
         return render(request, "encyclopedia/entry.html", {
             "title" : title,
@@ -86,14 +95,16 @@ def edit_entry(request, title):
         "entry": entry 
     })
 
-# Random Page: Clicking “Random Page” in the sidebar should take user to a random encyclopedia entry.
+# required - Random Page: Clicking “Random Page” in the sidebar should take user to a random encyclopedia entry.
 def random_page(request):
+    # checking entries and making sure they exist
     entries = util.list_entries()
     if not entries: 
         return render(request, "encyclopedia/error.html", {"error_mes": "no entries."})
     
-    random_entry = random.choice(entries) # random.choice() from python documentary under random
+    random_entry = random.choice(entries) # had to google this, random.choice() from python documentary under random
     
+    # retrieving and displaying like before 
     entry_content = util.get_entry(random_entry)
     return render(request, "encyclopedia/random_page.html", {
         "title": random_entry,
