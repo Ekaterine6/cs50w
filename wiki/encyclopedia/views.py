@@ -69,6 +69,7 @@ def create_entry(request):
             return render(request, "encyclopedia/error.html", {"error_mes": "entry exists."})
   
         util.save_entry(title, content)
+
         return render(request, "encyclopedia/entry.html", {
             "title": title,
             "entry": content
