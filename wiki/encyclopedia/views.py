@@ -16,10 +16,12 @@ def entry(request, entry):
     #project demand
     # using the appropriate util function to retrieve the title and the entry text - The view should get the content of the encyclopedia entry by calling 
     # the appropriate util function.
+    # retrieve data using get_entry and displaying it 
     text = util.get_entry(entry)
     if text is None:
        return render(request, "encyclopedia/error.html", {"error_mes": "entry does not exist"})
     
+    # On each entry’s page, any Markdown content in the entry file should be converted to HTML before being displayed to the user. You may use the python-markdown2
     mark_content = markdown2.markdown(text)
 
     return render(request, "encyclopedia/entry.html", {
@@ -37,7 +39,6 @@ def search(request):
         if not qsearch:
             return render(request, "encyclopedia/error.html", {"error_mes": "please fill out the field"})
         
-        #using the same method as i did in entry to retrieve data using get_entry and displaying it 
         qentry = util.get_entry(qsearch)
         if qentry is None:
             return render(request, "encyclopedia/error.html", {"error_mes": "Page not found"})
@@ -64,7 +65,7 @@ def create_entry(request):
         # not submitting data until certain tath it doesn't exist 
         if util.get_entry(title):
             return render(request, "encyclopedia/error.html", {"error_mes": "entry exists."})
-        # directing user to the display page
+  
         util.save_entry(title, content)
         return render(request, "encyclopedia/entry.html", {
             "title": title,
@@ -104,7 +105,6 @@ def random_page(request):
     
     random_entry = random.choice(entries) # had to google this, random.choice() from python documentary under random
     
-    # retrieving and displaying like before 
     entry_content = util.get_entry(random_entry)
     return render(request, "encyclopedia/random_page.html", {
         "title": random_entry,
