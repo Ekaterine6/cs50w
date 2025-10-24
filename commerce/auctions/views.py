@@ -9,7 +9,15 @@ from .models import User
 
 def index(request):
     return render(request, "auctions/index.html")
+    
+def categories(request):
+    return render(request, "auctions/categories.html")
 
+def listing(request):
+    return render(request, "auctions/listing.html")
+
+def watchlist(request):
+    return render(request, "auctions/watchlist.html")
 
 def login_view(request):
     if request.method == "POST":
