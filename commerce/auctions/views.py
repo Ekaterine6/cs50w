@@ -1,20 +1,43 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User
+from .models import Listing, User
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listing.objects.filter(is_active=True).order_by('-id')
+    return render(request, "auctions/index.html", {
+        "listings": listings
+    })
     
 def categories(request):
     return render(request, "auctions/categories.html")
 
+
 def listing(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        bid = request.POST.get("bid")
+        tag_category = request.POST.get("tag_category")
+        picture = request.FILES.get("picture")
+
+        # saving the listing info to database
+        Listing.objects.create(
+            title=title,
+            description=description,
+            bid=bid,
+            tag_category=tag_category,
+            picture=picture,
+            user=request.user if request.user.is_authenticated else None
+        )
+        return redirect("index")
     return render(request, "auctions/listing.html")
+
 
 def watchlist(request):
     return render(request, "auctions/watchlist.html")
