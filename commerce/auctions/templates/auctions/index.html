@@ -1,20 +1,34 @@
 {% extends "auctions/layout.html" %}
 
+
 {% block body %}
     <h2>Active Listings</h2>
 
+    <div class="container">
+
     {% for listing in listings %}
-    <div>
-        <h3>{{ listing.title }}</h3>
-        <p>{{ listing.description }}</p>
-        <p>Starting bid: ${{ listing.bid }}</p>
-        <p>Category: {{ listing.tag_category }}</p>
-        {% if listing.picture %}
-        <img src="{{ listing.picture.url }}" width="150">
-        {% endif %}
-    </div>
-    {% empty %}
-    <p>no active listings.</p>
-    {% endfor %}
-    
+
+    <a href="{% url 'listing_page' listing.id %}" class="text-decoration-none text-dark">
+        <div class="card mb-4 shadow-sm">
+            <div class="row g-0">
+                {% if listing.picture %}
+                    <div class="col-md-4">
+                        <img src="{{ listing.picture.url }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
+                    </div>
+                {% endif %}
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ listing.title }}</h5>
+                        <p class="card-text">{{ listing.description }}</p>
+                        <p class="card-text">Starting Bid: <strong>${{ listing.bid }}</strong></p>
+                        <p class="card-text">Category: {{ listing.tag_category }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+        {% empty %}
+        <p>No active listings</p>
+        {% endfor %}
+
 {% endblock %}

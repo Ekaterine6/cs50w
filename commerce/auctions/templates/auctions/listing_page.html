@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ listing.title }}</h2>
+
+    <div class="card mb-4 p-4">
+        {% if listing.picture %}
+        <img src="{{ listing.picture.url }}" class="img-fluid mb-3" alt="{{ listing.title }}">
+        {% endif %}
+
+        <p>Description: {{ listing.description }}</p>
+        <p>Current Bid: {{ listing.bid }}</p>
+        <p>Category:  {{ listing.tag_category }}</p>
+
+        <hr>
+        {% if user.is_authenticated %}
+        <form action="{% url 'add_watchlist' listing.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-warning">Add to watchlist</button>
+        </form>
+        {% else %}
+        <p><em>log in to view watchlist</em></p>
+        {% endif %}
+
+    </div>
+    {% endblock %}

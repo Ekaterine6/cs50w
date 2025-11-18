@@ -1,7 +1,9 @@
 {% extends "auctions/layout.html" %}
  
 {% block body %}
+
     <h2>Create Listing</h2>
+    <!--used enctype because of pictures-->
     <form action="{% url 'listing' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
@@ -11,14 +13,18 @@
             <textarea class="form-control" type="text" name="description" placeholder="Description"></textarea>
         </div>
         <div class="form-group">      
-            <input class="form-control" type="number" name="bid" placeholder="Starting Bid">
+            <input class="form-control" type="number" name="bid" min="0" placeholder="Starting Bid">
         </div>
-        <div class="form-group">    
-            <input class="form-control" type="file" name="picture">
+        <div>
+            <label for="picture">Insert Picture</label>
+            <input class="form-control-file" id="picture" type="file" name="picture">
         </div>
+        <!--literally just wanted little space between inputs so i used the simple <legend>-->
+        <legend></legend>
         <div class="form-group">    
             <input class="form-control" type="text" name="tag_category" placeholder="Category">
         </div>
         <input class="btn btn-primary" type="submit" value="Create Listing">
     </form>
+
 {% endblock %}                        

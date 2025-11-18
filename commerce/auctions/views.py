@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from .models import Listing, User
@@ -38,9 +38,19 @@ def listing(request):
         return redirect("index")
     return render(request, "auctions/listing.html")
 
+def listing_page(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id)
+    return render(request, "auctions/listing_page.html", {
+        "listing": listing
+    })
 
 def watchlist(request):
     return render(request, "auctions/watchlist.html")
+
+def add_watchlist(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    request.user.watchlist.add(listing)
+    return redirect("listing_page", listing_id=listing_id)
 
 def login_view(request):
     if request.method == "POST":
