@@ -46,6 +46,15 @@
             {% endif %}
 
         </ul>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="close">
+                {{ message }}
+                <span class="closebtn" onclick="this.parentElement.style.display='none'">X</span> 
+            </div>
+            {% endfor %}
+        {% endif %}
         
         {% block body %}
         {% endblock %}

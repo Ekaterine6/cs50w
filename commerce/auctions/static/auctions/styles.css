@@ -1,10 +1,7 @@
 body {
     padding: 10px;
+    background: red !important;
 }
-
-body { 
-    padding: 10px; 
-} 
 
 .card { 
     transition: transform 0.2s; 
@@ -13,3 +10,53 @@ body {
 .card:hover { 
     transform: scale(1.02); 
 }
+
+.close {
+    background-color: rgb(165, 200, 200);
+    color: black;
+    position: relative;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.close .closebtn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    cursor: pointer;
+    transform: translateY(-50%);
+    font-weight: bolder;
+}
+
+
+.listing-flex {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.listing-content {
+    flex: 1;
+    min-width: 200px;
+}
+
+.ls-pic {
+    height: auto;
+    width: 100%;
+    max-width: 300px;
+    display: block;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+    .listing-flex {
+        flex-direction: column;
+    }
+    .ls-pic {
+        max-width: 100%;
+    }
+}
+

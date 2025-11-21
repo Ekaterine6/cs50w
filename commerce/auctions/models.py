@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    watchlist = models.ManyToManyField('Listing', blank=True, related_name="watchlisted_by")
 
 class Listing(models.Model):
     # realized i needed to write all of these defaults="" while migrating
@@ -15,12 +15,20 @@ class Listing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listing", null=True, blank=True)
     # making sure the auctions are active
     is_active = models.BooleanField(default=True)
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True,null=True, related_name="win_listing")
 
     def __str__(self):
         return self.title
 
-class bids(models.Model):
-    pass 
+class Bid(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids", null=True, blank=True)
+    listing =models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} bid {self.amount} on {self.listing.title}"
+
 
 class comments(models.Model):
     pass 
