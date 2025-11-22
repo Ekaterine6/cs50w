@@ -24,7 +24,11 @@
         <div class="form-group">    
             <input class="form-control" type="text" name="tag_category" placeholder="Category">
         </div>
-        <input class="btn btn-primary" type="submit" value="Create Listing">
+        {% if user.is_authenticated %}
+            <input class="btn btn-primary" type="submit" value="Create Listing">
+        {% else %}
+            <p class="alert alert-danger">log in to be able to create a listing.</p>
+        {% endif %}
     </form>
 
 {% endblock %}                        

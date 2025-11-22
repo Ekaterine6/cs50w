@@ -9,11 +9,11 @@
     {% for listing in listings %}
 
     <a href="{% url 'listing_page' listing.id %}" class="text-decoration-none text-dark">
-        <div class="card mb-4 shadow-sm">
+        <div class="card mb-4 shadow-sm" style="background-color: azure;">
             <div class="row g-0">
                 {% if listing.picture %}
                     <div class="col-md-4">
-                        <img src="{{ listing.picture.url }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
+                        <img src="data:{{ listing.picture_content_type_safe }};base64,{{ listing.picture_base64 }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
                     </div>
                 {% endif %}
                 <div class="col-md-8">

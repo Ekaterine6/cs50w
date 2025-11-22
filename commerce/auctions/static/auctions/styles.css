@@ -1,6 +1,5 @@
 body {
     padding: 10px;
-    background: red !important;
 }
 
 .card { 
@@ -29,27 +28,7 @@ body {
 }
 
 
-.listing-flex {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    margin-bottom: 16px;
-}
 
-.listing-content {
-    flex: 1;
-    min-width: 200px;
-}
-
-.ls-pic {
-    height: auto;
-    width: 100%;
-    max-width: 300px;
-    display: block;
-    object-fit: cover;
-    border-radius: 6px;
-}
 
 @media (max-width: 600px) {
     .listing-flex {

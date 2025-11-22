@@ -7,7 +7,7 @@
     the active listings in that category.-->
     <ul>
     {% for category in categories %}
-        <li><a href="{% url 'cat_listings' category %}"> {{ category }}</a></li>
+       <li><a href="{% url 'cat_listings' category %}"> {{ category }}</a></li>
     {% endfor %}
     </ul>
 

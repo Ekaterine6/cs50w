@@ -3,19 +3,22 @@
 {% block body %}
     <h2>Watchlist</h2>
     
-    {% for listing in listings %}
-    <div>
-        <h4>{{ listing.title }}</h4>
-        <p>Current bid: {{ listing.bid }}</p>
-        <!--wanted to remove that link look from the button so i did that here instead of going to styles.css-->
-        <button class="btn btn-warning"><a style="text-decoration: none; color: black;" href="{% url 'listing_page' listing.id %}">View listing</a></button>
-        <form action="{% url 'remove_watchlist' listing.id %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button class="btn btn-warning">Remove item</button>
-        </form>
-    </div>
-    {% empty %}
-    <p>No items in watchlist</p>
-    {% endfor %}
-
+    {% if user.is_authenticated %}
+        {% for listing in listings %}
+            <div>
+                <h4>{{ listing.title }}</h4>
+                <p>Current bid: {{ listing.bid }}</p>
+                <!--wanted to remove that link look from the button so i did that here instead of going to styles.css-->
+                <button class="btn btn-warning"><a style="text-decoration: none; color: black;" href="{% url 'listing_page' listing.id %}">View listing</a></button>
+                <form action="{% url 'remove_watchlist' listing.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                    <button class="btn btn-warning">Remove item</button>
+                </form>
+            </div>
+        {% empty %}
+            <p>No items in watchlist</p>
+        {% endfor %}
+    {% else %}
+    <p class="alert alert-danger">Log in to view your watchlist</p>
+    {% endif %}
 {% endblock %}

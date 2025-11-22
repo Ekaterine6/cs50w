@@ -3,32 +3,39 @@
 {% block body %}
     <h2>{{ listing.title }}</h2>
 
-    <div class="listing-flex">
+    <!--was rushing so i put the styles here-->
+    <div style=" background-color: rgb(215, 239, 241);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 16px;">
 
-        {% if listing.picture %}
-        <img class="ls-pic" src="{{ listing.picture.url }}" alt="{{ listing.title }}">
+        {% if listing.picture_base64 %}
+            <img style="height: auto; width: 400px; display: block; border-radius: 6px;" src="data:{{ listing.picture_content_type_safe }};base64,{{ listing.picture_base64 }}" alt="{{ listing.title }}">
         {% endif %}
 
-        <div class="listing-content">
+        <div style="flex: 1; min-width: 200px;">
             <p>Description: {{ listing.description }}</p>
-            <p>Category:  {{ listing.tag_category }}</p>
+            <p>Category: {{ listing.tag_category }}</p>
 
+            <!--  watchlist  -->
             <hr>
-                {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
                 <form action="{% url 'add_watchlist' listing.id %}" method="post">
                     {% csrf_token %}
-                        {% if listing in user.watchlist.all %}
-                            <h3>Already in watchlist</h3>
-                        {% else %}
-                            <button class="btn btn-warning">Add to watchlist</button>
-                        {% endif %}  
-                </form>  
-                {% else %}
-                    <p><em>log in to view watchlist</em></p>
-                {% endif %}
+                    {% if listing in user.watchlist.all %}
+                        <h3>Already in watchlist</h3>
+                    {% else %}
+                        <button class="btn btn-warning">Add to watchlist</button>
+                    {% endif %}
+                </form>
+            {% else %}
+                <p><em>log in to view watchlist</em></p>
+            {% endif %}
 
-
-        <!--showing the current and starting bid amount-->
+            <!--  bid  -->
+            <!-- showing the current and starting bid amount -->
             {% if listing.bids.all %}
                 <div class="text-danger" style="width: 200px;">
                     <p>Current bid: ${{ listing.bids.all.last.amount }}</p>
@@ -39,46 +46,64 @@
 
             {% if error %}
                 <div class="alert alert-dark">
-                {{ error }}
+                    {{ error }}
                 </div>
             {% endif %}
 
-
-        <!-- the one who created the listing, 
-        the user should have the ability to “close” the auction from this page-->
+            <!-- the one who created the listing, the user should have the ability to “close” the auction from this page -->
             {% if user.is_authenticated and user == listing.user and listing.is_active %}
                 <form action="{% url 'close_auction' listing.id %}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-danger">close auction</button>
+                    {% csrf_token %}
+                    <button class="btn btn-danger">close auction</button>
                 </form>
             {% endif %}
 
-        <!--If the user is signed in, the user should be able to bid on the item.
-        The bid must be at least as large as the starting bid, and must be greater 
-        than any other bids that have been placed (if any)...-->
+            <!-- If the user is signed in, the user should be able to bid on the item.
+                 The bid must be at least as large as the starting bid, and must be greater
+                 than any other bids that have been placed (if any) -->
             {% if listing.is_active %}
-            {% if user.is_authenticated %}
-                <form action="{% url 'placed_bid' listing.id %}" method="post">
-                {% csrf_token %}
-                    <input type="number" step="0.01" name="bid_amount" placeholder="your bid">
-                    <button class="btn btn-warning">bid</button>
-                </form>
-            {% else %}
-                <p>log in to place a bid</p>
-            {% endif %}
+                {% if user.is_authenticated %}
+                    <form action="{% url 'placed_bid' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="number" step="0.01" name="bid_amount" placeholder="your bid">
+                        <button class="btn btn-warning">bid</button>
+                    </form>
+                {% else %}
+                    <p>log in to place a bid</p>
+                {% endif %}
             {% endif %}
 
-
-        <!--the highest bidder the winner of the auction and makes the listing no longer active.-->
+            <!-- the highest bidder the winner of the auction and makes the listing no longer active -->
             {% if not listing.is_active %}
                 {% if listing.winner == user %}
                     <div class="alert alert-success">you have won this auction</div>
                 {% else %}
                     <div class="aler alert-info">this auction is closed</div>
                 {% endif %}
-                {% endif %}
+            {% endif %}
+
+
+        <!-- comments -->
+         {% for comment in comms %}
+         <p>{{ comment.user.username }}: {{ comment.text }}</p>
+         {% empty %}
+         <p>no comments.</p>
+         {% endfor %}
+
+         {% if user.is_authenticated %}
+         <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="com_txt" placeholder="Leave a comment">
+            </div>
+            <input class="btn btn-primary" type="submit" value="Comment">
+    
+         </form>
+         {% else %}
+         <p>log in to comment</p>
+         {% endif %}
 
         </div>
 
     </div>
-    {% endblock %}
+{% endblock %}
