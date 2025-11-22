@@ -31,7 +31,7 @@
                     {% endif %}
                 </form>
             {% else %}
-                <p><em>log in to view watchlist</em></p>
+                <p class="text-danger">log in to view watchlist</p>
             {% endif %}
 
             <!--  bid  -->
@@ -69,7 +69,7 @@
                         <button class="btn btn-warning">bid</button>
                     </form>
                 {% else %}
-                    <p>log in to place a bid</p>
+                    <p class="text-danger">log in to place a bid</p>
                 {% endif %}
             {% endif %}
 
@@ -78,7 +78,7 @@
                 {% if listing.winner == user %}
                     <div class="alert alert-success">you have won this auction</div>
                 {% else %}
-                    <div class="aler alert-info">this auction is closed</div>
+                    <div class="aler alert-danger">this auction is closed</div>
                 {% endif %}
             {% endif %}
 
@@ -100,7 +100,7 @@
     
          </form>
          {% else %}
-         <p>log in to comment</p>
+         <p class="text-danger">log in to comment</p>
          {% endif %}
 
         </div>

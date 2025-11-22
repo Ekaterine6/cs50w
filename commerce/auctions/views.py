@@ -11,7 +11,7 @@ from .models import Listing, User, Bid, Comment
 
 # i wanted to diplay pictures at first wanted to store the files to media folder basically filesystem folders but 
 # then my project would be rejected because - "branch should match the file structure of the unzipped distribution code as originally received."
-# so i learned from internet that i could use base64.b64encode "Encode the bytes-like object s using Base64 and return the encoded bytes."
+# so i learned from internet that i could use base64.b64encode "Encode the bytes-like object s using Base64 and return the encoded bytes." thats from python documentation
 
 import base64
 
@@ -21,6 +21,7 @@ import base64
 def index(request):
     listings = Listing.objects.filter(is_active=True).order_by('-id')
 
+    # using base64 to be able to display pictures and had to write all this code to see jpeg/img 
     for listing in listings:
         if listing.picture:
             pic_byt = listing.picture
@@ -60,6 +61,17 @@ def categories(request):
 
 def cat_listings(request, cat_name):
     listings = Listing.objects.filter(tag_category=cat_name, is_active=True)
+
+    for listing in listings:
+        if listing.picture:
+            pic_byt = listing.picture
+            if isinstance(pic_byt, str):
+                pic_byt = pic_byt.encode()  
+            listing.picture_base64 = base64.b64encode(pic_byt).decode()
+            listing.picture_content_type_safe = "image/jpeg" 
+        else:
+            listing.picture_base64 = None
+            listing.picture_content_type_safe = None
 
     return render(request, "auctions/index.html", {
         "listings":listings,
