@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#compose-form').addEventListener('submit', send_email);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -22,6 +23,29 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+function send_email(event) {
+    // stopping the default behaviour of reloading the page after a submitted form
+    event.preventDefault();
+
+    const recipients = document.querySelector('#compose-recipients').value;
+    const subject = document.querySelector('#compose-subject').value;
+    const body = document.querySelector('#compose-body').value;
+
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+        recipients: recipients,
+        subject: subject,
+        body: body
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log(result);
+      load_mailbox('sent');
+    });
+}
+
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
@@ -30,4 +54,26 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch(`/emails/${mailbox}`)
+  .then(response => response.json())
+  .then(emails => {
+    emails.forEach(email => {
+      const element = document.createElement('div');
+      element.className = "card mb-3"; // bootstrap card design
+      element.style.cursor = "pointer";
+
+      element.innerHTML = `
+        <div class="card-body">
+          <strong><h5 class="card-title">${email.sender}</h5></strong>
+          <h6 class="card-subtitle mb-2 text-muted">Subject: ${email.subject}</h6>
+          <p class="card-text">Date: ${email.timestamp}</p>
+        </div>
+      `;
+
+      element.addEventListener('click', () => load_email(email.id));
+
+      document.querySelector('#emails-view').append(element);
+    });
+  });
 }
