@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+
+<!--Users who are signed in should be able to write a new text-based post by filling in 
+text into a text area and then clicking a button to submit the post.-->
+{% block title %}New Post{% endblock %}
+
+{% block body %}
+<h1>Create a new post</h1>
+
+<form action="{% url 'new_post' %}" method="post">
+    {% csrf_token %}
+    <textarea name="new_txt" class="form-control" placeholder="Hello!"></textarea>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
