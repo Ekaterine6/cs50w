@@ -13,13 +13,14 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.content[:30]}"
+
+
+#class Profile(models.Model):
+#    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+ #   following = models.ManyToManyField("self", symmetrical=False, related_name="followers", blank=True)
     
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    following = models.ManyToManyField("self", symmetrical=False, related_name="followers", blank=True)
-    
-    def __str__(self):
-        return f"profile({self.user.username})"
+  #  def __str__(self):
+   #     return f"profile({self.user.username})"
 
 
 class Likes():
