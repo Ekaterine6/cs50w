@@ -1,17 +1,18 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 
 def index(request):
-    all_posts = Post.objects.all().order_by("-timestamp")
-    return render(request, "network/index.html", {"posts": all_posts})
-
-
+    posts = Post.objects.all().order_by("-timestamp")
+    return render(request, "network/index.html", {
+        "posts": posts
+    })
 
 
 def login_view(request):
@@ -66,13 +67,63 @@ def register(request):
         return render(request, "network/register.html")
     
 
+@login_required
 def new_post(request): 
     if request.method == "POST":
-        new_txt = request.POST.get("new_txt")
+        content = request.POST.get("new_txt")
 
-        if request.user.is_authenticated and new_txt:
-            Post.objects.create(user=request.user, content=new_txt)
+        if content.strip():
+            Post.objects.create(
+                user=request.user, 
+                content=content
+            )
 
         return HttpResponseRedirect(reverse("index"))
 
     return render(request, "network/new_post.html")
+
+
+
+@login_required
+def following(request):
+    follows = Follow.objects.filter(follower=request.user)
+    users = []
+
+    for f in follows:
+        users.append(f.following)
+
+    posts = Post.objects.filter(user__in=users).order_by("-timestamp")
+
+    return render(request, "network/following.html", {
+        "posts": posts
+    })
+
+
+
+def profile(request, username):
+    profile_user = get_object_or_404(User, username=username)
+
+    posts = Post.objects.filter(
+        user=profile_user).order_by("-timestamp")
+    
+    followers_count = Follow.objects.filter(
+        following=profile_user
+    ).count()
+
+    following_count = Follow.objects.filter(
+        follower=profile_user
+    ).count()
+
+    is_following = False
+    if request.user.is_authenticated and request.user != profile_user:
+        is_following = Follow.objects.filter(
+            follower=request.user,
+            following=profile_user).exists()
+        
+    return render(request, "network/profile.html", {
+        "profile_user": profile_user,
+        "posts": posts,
+        "followers_count":followers_count,
+        "following_count": following_count,
+        "is_following": is_following
+    })

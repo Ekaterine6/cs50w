@@ -1,0 +1,46 @@
+{% extends "network/layout.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+<div class="container mt-3">
+    <h2>{{ profile_user.user }}</h2>
+
+    <p>Followers:</p> <span id="followers-count">{{ followers_count }}</span>
+    Following: {{ following_count }}
+</div>
+
+{% if user.is_authenticated and user != profile_user %}
+<button id="follow-btn" class="btn btn-primary">
+    {% if is_following %}
+    Unfollow
+    {% else %}
+    Fallow 
+    {% endif %}
+</button>
+{% endif %}
+
+<h3>Posts</h3>
+<div id="posts">
+    {% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.user.username }}</h5>
+            <p class="card-text" id="post-{{ post.id }}">{{ post.content }}</p>
+            <h6 class="card-subtitle">{{ post.timestamp|date:"M d, Y H:i" }}</h6>
+            {% if user == post.user %}
+            <a href="#" class="card-link edit-post" data-id="{{ post.id }}">edit</a>
+            {% endif %}
+            <a href="#" class="card-link like-post" data-id="{{post.id}}">Like</a>
+            <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>likes
+        </div>
+    </div>
+    {% empty %}
+    <p>no posts.</p>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
