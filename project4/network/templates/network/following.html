@@ -1,0 +1,22 @@
+{% extends "network/layout.html" %}
+
+{% block title %}Following{% endblock %}
+
+{% block body %}
+<div class="container mt-3">
+    <h1>Posts from users you are following</h1>
+    {% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.user.username }}</h5>
+            <p class="card-text">{{ post.content }}</p>
+            <h5 class="card-subtitle mb-2">{{ post.timestamp }}</h5>
+            <a href="#" class="card-link like-post" data-id="{{ post.id }}">like</a>
+            <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>likes
+        </div>
+    </div>
+    {% empty %}
+    <p>no posts</p>
+    {% endfor %}
+</div>
+{% endblock %}

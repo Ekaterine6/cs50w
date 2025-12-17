@@ -6,18 +6,18 @@ Profile
 
 {% block body %}
 <div class="container mt-3">
-    <h2>{{ profile_user.user }}</h2>
+    <h2>{{ profile_user.username }}</h2>
 
-    <p>Followers:</p> <span id="followers-count">{{ followers_count }}</span>
+    <p>Followers: <span id="followers-count">{{ followers_count }}</span>
     Following: {{ following_count }}
-</div>
+    </p>
 
 {% if user.is_authenticated and user != profile_user %}
 <button id="follow-btn" class="btn btn-primary">
     {% if is_following %}
     Unfollow
     {% else %}
-    Fallow 
+    Follow 
     {% endif %}
 </button>
 {% endif %}
@@ -29,7 +29,7 @@ Profile
         <div class="card-body">
             <h5 class="card-title">{{ post.user.username }}</h5>
             <p class="card-text" id="post-{{ post.id }}">{{ post.content }}</p>
-            <h6 class="card-subtitle">{{ post.timestamp|date:"M d, Y H:i" }}</h6>
+            <h6 class="card-subtitle">{{ post.timestamp }}</h6>
             {% if user == post.user %}
             <a href="#" class="card-link edit-post" data-id="{{ post.id }}">edit</a>
             {% endif %}
@@ -42,5 +42,69 @@ Profile
     {% endfor %}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        //follow and unfollow
+        const followBtn = document.getElementById('follow-btn');
+        if(followBtn) {
+            followBtn.addEventListener('click', () => {
+                fetch("{% url 'toggle_follow' profile_user.username %}", {
+                    method: 'PUT',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    followBtn.innerText = data.is_following ? "Unfollow" : "Follow";
+                    document.getElementById('followers-count').innerText = data.followers_count;
+                });
+            });
+        }
+
+        // like unlike
+
+        document.querySelectorAll('.like-post').forEach(button => {
+            button.addEventListener('click', () => {
+                const postId = button.dataset.id;
+                fetch(`/like/${postId}`, {
+                    method: 'PUT',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`like-count-${postId}`).innerText = data.likes_count;
+                });
+            });
+        });
+
+        // editing the post'
+        document.querySelectorAll('.edit-post').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const postId = link.dataset.id;
+                const postText = document.getElementById(`post-${postId}`);
+                const currentContent = postText.innerText;
+
+                postText.innerHTML = `<textarea class="form-control" id="edit-${postId}">${currentContent}</textarea>
+                <button class="btn btn-success" id="save-${postId}">Save</button>
+                `;
+
+                document.getElementById(`save-${postId}`).addEventListener('click', () => {
+                    const newContent = document.getElementById(`edit-${postId}`).value;
+                    fetch(`/edit/${postId}`, {
+                        method: 'PUT',
+                        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                        body: JSON.stringify({content: newContent})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        postText.innerText = data.content;
+                    });
+                });
+            });
+        });
+    });
+</script>
 
 {% endblock %}
