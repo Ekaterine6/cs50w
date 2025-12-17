@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -10,8 +11,12 @@ from .models import User, Post, Follow
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp")
+    paginator = Paginator(posts, 10)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "posts": posts
+        "page_obj":page_obj
     })
 
 
