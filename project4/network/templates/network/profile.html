@@ -24,10 +24,13 @@ Profile
 
 <h3>Posts</h3>
 <div id="posts">
-    {% for post in posts %}
+    {% for post in page_obj %}
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ post.user.username }}</h5>
+            <h5 class="card-title">
+                <a href="{% url 'profile' post.user.username %}"> 
+                    {{ post.user.username }}</a>
+                </h5>
             <p class="card-text" id="post-{{ post.id }}">{{ post.content }}</p>
             <h6 class="card-subtitle">{{ post.timestamp }}</h6>
             {% if user == post.user %}

@@ -91,12 +91,7 @@ def new_post(request):
 
 @login_required
 def following(request):
-    follows = Follow.objects.filter(follower=request.user)
-    users = []
-
-    for f in follows:
-        users.append(f.following)
-
+    users = Follow.objects.filter(follower=request.user).values_list("following", flat=True)
     posts = Post.objects.filter(user__in=users).order_by("-timestamp")
 
     return render(request, "network/following.html", {
