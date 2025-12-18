@@ -8,15 +8,42 @@
     {% for post in page_obj %}
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ post.user.username }}</h5>
-            <p class="card-text">{{ post.content }}</p>
-            <h5 class="card-subtitle mb-2">{{ post.timestamp }}</h5>
-            <a href="#" class="card-link like-post" data-id="{{ post.id }}">like</a>
+            <h5 class="card-title">
+                <a href="{% url 'profile' post.user.username %}"> 
+                    {{ post.user.username }}</a>
+                </h5>
+            <p class="card-text" id="post-{{ post.id }}">{{ post.content }}</p>
+            <h6 class="card-subtitle">{{ post.timestamp }}</h6>
+            <a href="#" class="card-link like-post" data-id="{{post.id}}">Like</a>
             <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>likes
         </div>
     </div>
     {% empty %}
     <p>no posts</p>
     {% endfor %}
+    {% include "network/pagination.html" %}
 </div>
+
+<script>
+  // i should have used a script.js but last minute just chose to copy paste the same code from my profile.html
+  document.addEventListener('DOMContentLoaded', function() {
+
+        // like unlike
+        document.querySelectorAll('.like-post').forEach(button => {
+            button.addEventListener('click', () => {
+                const postId = button.dataset.id;
+                fetch(`/like/${postId}`, {
+                    method: 'PUT',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`like-count-${postId}`).innerText = data.likes_count;
+                });
+            });
+        });
+
+  });
+</script>
+
 {% endblock %}

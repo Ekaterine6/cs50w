@@ -13,53 +13,69 @@
                 <a href="{% url 'profile' post.user.username %}"> 
                     {{ post.user.username }}</a>
                 </h5>
-
-            <p class="card-text">{{ post.content }}</p>
-            <h6 class="card-subtitle mb-2 text-muted">{{ post.timestamp }}</h6>
-
-            <a href="#" class="card-link">Edit</a>
-            <a href="#" class="card-link">Like</a>
+            <p class="card-text" id="post-{{ post.id }}">{{ post.content }}</p>
+            <h6 class="card-subtitle">{{ post.timestamp }}</h6>
+            {% if user == post.user %}
+            <a href="#" class="card-link edit-post" data-id="{{ post.id }}">edit</a>
+            {% endif %}
+            <a href="#" class="card-link like-post" data-id="{{post.id}}">Like</a>
+            <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span>likes
         </div>
     </div>
     {% empty %}
     <p>no pots</p>
     {% endfor %}
+
+    {% include "network/pagination.html" %}
 </div>
 
-<!--Bootstrap’s Pagination features may be helpful for displaying pages on the front-end (in your HTML)-->
-<nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center">
 
-    {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
-          Previous
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <span class="page-link">Previous</span>
-      </li>
-    {% endif %}
+<script>
+  // i should have used a script.js but last minute just chose to copy paste the same code from my profile.html
+  document.addEventListener('DOMContentLoaded', function() {
 
-    <li class="page-item active">
-      <span class="page-link">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-      </span>
-    </li>
+        // like unlike
+        document.querySelectorAll('.like-post').forEach(button => {
+            button.addEventListener('click', () => {
+                const postId = button.dataset.id;
+                fetch(`/like/${postId}`, {
+                    method: 'PUT',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`like-count-${postId}`).innerText = data.likes_count;
+                });
+            });
+        });
 
-    {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-          Next
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <span class="page-link">Next</span>
-      </li>
-    {% endif %}
+        // editing the post'
+        document.querySelectorAll('.edit-post').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const postId = link.dataset.id;
+                const postText = document.getElementById(`post-${postId}`);
+                const currentContent = postText.innerText;
 
-  </ul>
-</nav>
+                postText.innerHTML = `<textarea class="form-control" id="edit-${postId}">${currentContent}</textarea>
+                <button class="btn btn-success" id="save-${postId}">Save</button>
+                `;
+
+                document.getElementById(`save-${postId}`).addEventListener('click', () => {
+                    const newContent = document.getElementById(`edit-${postId}`).value;
+                    fetch(`/edit/${postId}`, {
+                        method: 'PUT',
+                        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                        body: JSON.stringify({content: newContent})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        postText.innerText = data.content;
+                    });
+                });
+            });
+        });
+  });
+</script>
+
 {% endblock %}

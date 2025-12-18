@@ -8,8 +8,8 @@ Profile
 <div class="container mt-3">
     <h2>{{ profile_user.username }}</h2>
 
-    <p>Followers: <span id="followers-count">{{ followers_count }}</span>
-    Following: {{ following_count }}
+    <p>Followers: <span id="followers_count">{{ followers_count }}</span>
+    Following: {{ followers_count }}
     </p>
 
 {% if user.is_authenticated and user != profile_user %}
@@ -43,6 +43,7 @@ Profile
     {% empty %}
     <p>no posts.</p>
     {% endfor %}
+    {% include "network/pagination.html" %}
     </div>
 </div>
 
@@ -60,7 +61,7 @@ Profile
                 .then(response => response.json())
                 .then(data => {
                     followBtn.innerText = data.is_following ? "Unfollow" : "Follow";
-                    document.getElementById('flw-count').innerText = data.followers_count;
+                    document.getElementById('followers_count').innerText = data.flw-count;
                 });
             });
         }

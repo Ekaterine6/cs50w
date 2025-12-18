@@ -132,7 +132,7 @@ def toggle_follow(request, username):
 
     return JsonResponse({
         "is_following": is_following,
-        "flw_count": flw_count
+        "followers_count": flw_count
     })
 
 
