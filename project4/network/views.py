@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+import json
 
 from .models import User, Post, Follow
 
@@ -102,6 +103,38 @@ def following(request):
         "page_obj": page_obj
     })
 
+@login_required
+def toggle_follow(request, username):
+    if request.method !="PUT":
+        return JsonResponse({"error": "required put request"})
+    
+    target = get_object_or_404(User, username=username)
+    #preventing following yourself
+    if request.user == target:
+        return JsonResponse({"error": "cant follow yourself"})
+    
+    follow = Follow.objects.filter(
+        follower=request.user,
+        following=target
+    )
+    
+    if follow.exists():
+        follow.delete()
+        is_following = False
+    else:
+        Follow.objects.create(
+            follower=request.user,
+            following=target
+        )
+        is_following = True
+
+    flw_count = Follow.objects.filter(following=target).count()
+
+    return JsonResponse({
+        "is_following": is_following,
+        "flw_count": flw_count
+    })
+
 
 
 def profile(request, username):
@@ -142,3 +175,34 @@ def like(request, post_id):
     
     post = get_object_or_404(Post, id=post_id)
     if request.user in post.likes.all():
+        post.likes.remove(request.user)
+        liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+
+    return JsonResponse({
+        "liked": liked,
+        "likes_count": post.likes.count()
+    })
+
+
+@login_required
+def editing(request, post_id):
+    if request.method != "PUT":
+        return JsonResponse({"error": "put request needed."})
+    
+    post = get_object_or_404(Post, id=post_id)
+
+    if post.user != request.user:
+        return JsonResponse({"error": "not allowed"})
+    
+    data = json.loads(request.body)
+
+    post.content = data.get("content", post.content)
+    post.save()
+    return JsonResponse({
+        "content": post.content
+    })
+
+

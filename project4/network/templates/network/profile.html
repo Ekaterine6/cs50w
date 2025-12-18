@@ -60,7 +60,7 @@ Profile
                 .then(response => response.json())
                 .then(data => {
                     followBtn.innerText = data.is_following ? "Unfollow" : "Follow";
-                    document.getElementById('followers-count').innerText = data.followers_count;
+                    document.getElementById('flw-count').innerText = data.followers_count;
                 });
             });
         }
