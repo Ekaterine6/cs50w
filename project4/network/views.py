@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -93,9 +93,13 @@ def new_post(request):
 def following(request):
     users = Follow.objects.filter(follower=request.user).values_list("following", flat=True)
     posts = Post.objects.filter(user__in=users).order_by("-timestamp")
+    paginator = Paginator(posts, 10)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "network/following.html", {
-        "posts": posts
+        "page_obj": page_obj
     })
 
 
@@ -103,12 +107,9 @@ def following(request):
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
 
-    posts = Post.objects.filter(
-        user=profile_user).order_by("-timestamp")
+    posts = Post.objects.filter(user=profile_user).order_by("-timestamp")
     
-    followers_count = Follow.objects.filter(
-        following=profile_user
-    ).count()
+    followers_count = Follow.objects.filter(following=profile_user).count()
 
     following_count = Follow.objects.filter(
         follower=profile_user
@@ -120,10 +121,24 @@ def profile(request, username):
             follower=request.user,
             following=profile_user).exists()
         
+    paginator = Paginator(posts, 10)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+        
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
-        "posts": posts,
+        "page_obj": page_obj,
         "followers_count":followers_count,
         "following_count": following_count,
         "is_following": is_following
     })
+
+
+@login_required
+def like(request, post_id):
+    if request.method != "PUT":
+        return JsonResponse({"error": "put request required"})
+    
+    post = get_object_or_404(Post, id=post_id)
+    if request.user in post.likes.all():

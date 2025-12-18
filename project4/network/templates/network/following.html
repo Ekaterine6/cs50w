@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container mt-3">
     <h1>Posts from users you are following</h1>
-    {% for post in posts %}
+    {% for post in page_obj %}
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">{{ post.user.username }}</h5>
