@@ -24,7 +24,7 @@ Profile
 
 <h3>Posts</h3>
 <div id="posts">
-    {% for post in page_obj %}
+    {% for post in page_pag %}
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">
@@ -47,6 +47,7 @@ Profile
     </div>
 </div>
 
+<!--same snippet of code, i know it is not ideal -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 

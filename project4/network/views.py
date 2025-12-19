@@ -12,12 +12,13 @@ from .models import User, Post, Follow
 
 def index(request):
     posts = Post.objects.all().order_by("-timestamp")
-    paginator = Paginator(posts, 10)
+    #Django’s Paginator class may be helpful for implementing pagination on the back-end
+    paginator = Paginator(posts, 10) #posts should only be displayed 10 on a page
 
     page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    page_pag = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "page_obj":page_obj
+        "page_pag":page_pag
     })
 
 
@@ -92,24 +93,28 @@ def new_post(request):
 
 @login_required
 def following(request):
+    #The “Following” link in the navigation bar should take the user to a page 
+    # where they see all posts made by users that the current user follows.
     users = Follow.objects.filter(follower=request.user).values_list("following", flat=True)
     posts = Post.objects.filter(user__in=users).order_by("-timestamp")
     paginator = Paginator(posts, 10)
 
     page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    page_pag = paginator.get_page(page_number)
 
     return render(request, "network/following.html", {
-        "page_obj": page_obj
+        "page_pag": page_pag
     })
 
 @login_required
+# For any other user who is signed in, this page should also display a “Follow” or “Unfollow” 
+# button that will let the current user toggle whether or not they are following this user’s posts. Note that this only applies to any “other” user:
 def toggle_follow(request, username):
     if request.method !="PUT":
         return JsonResponse({"error": "required put request"})
     
     target = get_object_or_404(User, username=username)
-    #preventing following yourself
+    #preventing following yourself specification: a user should not be able to follow themselves.
     if request.user == target:
         return JsonResponse({"error": "cant follow yourself"})
     
@@ -155,19 +160,19 @@ def profile(request, username):
             following=profile_user).exists()
         
     paginator = Paginator(posts, 10)
-
     page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    page_pag = paginator.get_page(page_number)
         
     return render(request, "network/profile.html", {
         "profile_user": profile_user,
-        "page_obj": page_obj,
+        "page_pag": page_pag,
         "followers_count":followers_count,
         "following_count": following_count,
         "is_following": is_following
     })
 
 
+#“Like” and “Unlike”
 @login_required
 def like(request, post_id):
     if request.method != "PUT":
@@ -187,6 +192,7 @@ def like(request, post_id):
     })
 
 
+# Edit Post: click an “Edit” button or link on any of their own posts to edit that post.
 @login_required
 def editing(request, post_id):
     if request.method != "PUT":

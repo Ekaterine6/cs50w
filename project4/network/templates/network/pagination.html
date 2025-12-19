@@ -1,12 +1,12 @@
 <!--made this html so i dont have to repeat this code in every page that displays posts-->
 <!--Bootstrap’s Pagination features may be helpful for displaying pages on the front-end (in your HTML)-->
-{% if page_obj %}
+{% if page_pag %}
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center">
 
-    {% if page_obj.has_previous %}
+    {% if page_pag.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+        <a class="page-link" href="?page={{ page_pag.previous_page_number }}">
           Previous
         </a>
       </li>
@@ -18,13 +18,13 @@
 
     <li class="page-item active">
       <span class="page-link">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        Page {{ page_pag.number }} of {{ page_pag.paginator.num_pages }}
       </span>
     </li>
 
-    {% if page_obj.has_next %}
+    {% if page_pag.has_next %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+        <a class="page-link" href="?page={{ page_pag.next_page_number }}">
           Next
         </a>
       </li>
