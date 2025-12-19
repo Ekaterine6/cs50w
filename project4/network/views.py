@@ -74,6 +74,7 @@ def register(request):
         return render(request, "network/register.html")
     
 
+# New Post
 @login_required
 def new_post(request): 
     if request.method == "POST":
@@ -97,6 +98,7 @@ def following(request):
     # where they see all posts made by users that the current user follows.
     users = Follow.objects.filter(follower=request.user).values_list("following", flat=True)
     posts = Post.objects.filter(user__in=users).order_by("-timestamp")
+    #same pagination code
     paginator = Paginator(posts, 10)
 
     page_number = request.GET.get("page")
