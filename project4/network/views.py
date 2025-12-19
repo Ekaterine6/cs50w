@@ -141,7 +141,7 @@ def toggle_follow(request, username):
     })
 
 
-
+# Profile Page: Clicking on a username should load that user’s profile page.
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
 
