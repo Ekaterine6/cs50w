@@ -27,6 +27,15 @@
       width: 140px;
       height: auto;
     }
+    #section-content img {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5); /* initial shadow */
+    }
+
+    #section-content img:hover {
+      transform: scale(1.05); /* image slightly grows on hover */
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7); /* shadow gets bigger */
+    }
 
     .hero {
       position: relative;
@@ -267,7 +276,7 @@
           <h2>What We Do</h2>
           <p>At TechFluence, we design and develop custom software solutions tailored to your business needs. From robust web applications to scalable backend systems, we combine technical expertise with innovative thinking to deliver reliable, high-performance results.</p>
         </div>
-        <div>
+        <div id="section-content">
           <img src="styles/computerpic.jpg" alt="What We Do" />
         </div>
       </div>
@@ -279,7 +288,7 @@
           <h2>Why Choose Us</h2>
           <p>TechFluence is built on a foundation of technical excellence and problem-solving. We focus on clean, efficient code and scalable architecture to ensure every project is built for performance and reliability. Our approach combines deep technical knowledge with strategic insight, so your software works exactly the way it should, today and in the future.</p>
         </div>
-        <div>
+        <div id="section-content">
           <img src="styles/worldpic.jpg" alt="Why Choose Us" />
         </div>
       </div>
