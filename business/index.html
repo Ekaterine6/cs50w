@@ -47,8 +47,8 @@
     .float-btn {
       position: absolute;
       padding: 12px 20px;
-      border: 1px solid #00f; /* as in your working example */
-      color: #00f;
+      border: 1px solid rgb(150, 150, 202);
+      color: rgb(48, 123, 208);
       text-transform: uppercase;
       font-weight: bold;
       letter-spacing: 1px;
@@ -165,9 +165,56 @@
       position:absolute; left:-100%; top:0; width:100%; height:100%; background:#fff; z-index:-1; transition:left .28s ease;
     }
     .reveal-btn:hover::before, .social-btn:hover::before { left:0; }
-    .reveal-btn:hover, .social-btn:hover { color:#000; }
+    .reveal-btn:hover, .social-btn:hover { color:#1d7da7; }
 
     #email-text { display:none; margin-top:8px; color:#00a0ff; font-weight:700; }
+
+
+    /* Burger Menu */
+.burger-menu {
+  position: fixed;
+  top: 25px;
+  right: 30px;
+  width: 28px;
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 10010;
+}
+
+.burger-menu .bar {
+  height: 4px;
+  width: 100%;
+  background-color: #00f; /* matches your floating button color */
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: fixed;
+  top: 60px;
+  right: 30px;
+  background-color: rgba(0,0,0,0.95);
+  padding: 20px;
+  border-radius: 12px;
+  display: none; /* hidden by default */
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10005;
+}
+
+.dropdown-menu a {
+  color: #00f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.dropdown-menu a:hover {
+  color: #fff;
+}
 
   </style>
 
@@ -180,6 +227,24 @@
   <div class="top-left-logo">
     <a href="index.html"><img src="styles/logo.png" alt="TechFluence logo" class="logo" /></a>
   </div>
+
+  <!-- Burger Menu -->
+  <div class="burger-menu" id="burger-menu">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <!-- Dropdown Menu -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <a href="pages/about.html">About</a>
+    <a href="pages/services.html">Services</a>
+    <a href="pages/careers.html">Careers</a>
+    <a href="pages/contact.html">Contact</a>
+  </div>
+
+
+
 
   <!-- HERO -->
   <header class="hero" role="banner">
@@ -356,6 +421,28 @@
       });
 
     })();
+
+    // Burger menu toggle
+const burger = document.getElementById('burger-menu');
+const dropdown = document.getElementById('dropdown-menu');
+
+burger.addEventListener('click', () => {
+  const isOpen = dropdown.style.display === 'flex';
+  dropdown.style.display = isOpen ? 'none' : 'flex';
+
+  // animate bars into X when open
+  const bars = burger.querySelectorAll('.bar');
+  if(!isOpen){
+    bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    bars[1].style.opacity = '0';
+    bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    bars[0].style.transform = 'rotate(0) translate(0,0)';
+    bars[1].style.opacity = '1';
+    bars[2].style.transform = 'rotate(0) translate(0,0)';
+  }
+});
+
   </script>
 </body>
 </html>
