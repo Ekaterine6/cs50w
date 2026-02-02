@@ -4,74 +4,67 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About Us - TechFluence Agency</title>
-  <link rel="stylesheet" href="../styles/style.css" />
   <link rel="icon" type="image/jpg" href="../styles/faviconline.jpg" />
-  <style>
-    :root {
-      --main-blue: #0a84ff;
-    }
-    body { background-color: #000; color: #fff; font-family: sans-serif; margin: 0; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; position: sticky; top: 0; background-color: #000; z-index: 100; }
-    header .logo { height: 60px; }
-    nav ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
-    nav a { color: var(--main-blue); text-decoration: none; font-weight: bold; transition: 0.3s; }
-    nav a:hover { color: #fff; }
-    .section { padding: 60px 20px; max-width: 1200px; margin: auto; }
-    .section h1, .section h2 { color: #fff; margin-bottom: 20px; }
-    .section p { color: #ccc; line-height: 1.8; margin-bottom: 20px; }
-    .section-content img { width: 100%; max-width: 600px; display: block; margin: 20px auto; border-radius: 10px; box-shadow: 0 14px 30px rgba(0,0,0,0.5); }
-    .founder-story { background: linear-gradient(135deg,#111,#222); padding: 60px 20px; text-align:center; border-radius:10px; box-shadow:0 8px 20px rgba(0,0,0,0.3); margin-top: 40px; }
-    footer { background-color: #000; color: #aaa; text-align:center; padding: 30px 20px; }
-    footer a { color: var(--main-blue); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    /* Mobile nav hamburger */
-    .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
-    .hamburger span { display: block; width: 25px; height: 3px; background: var(--main-blue); border-radius: 2px; }
-    @media(max-width:768px){
-      nav ul { display: none; flex-direction: column; background:#111; position:absolute; top:80px; right:20px; padding:20px; border-radius:8px; width:200px; }
-      nav ul.show { display: flex; }
-      .hamburger { display: flex; }
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/style.css" />
 </head>
 <body>
   <header>
-    <img src="../styles/logo.png" alt="Logo" class="logo"/>
-    <nav>
-      <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
-      <ul id="menu">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="careers.html">Careers</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
+    <div class="container header-inner">
+      <img src="../styles/logo.png" alt="Logo" class="logo"/>
+      <nav>
+        <div class="hamburger" onclick="document.getElementById('menu').classList.toggle('show')">
+          <span></span><span></span><span></span>
+        </div>
+        <ul id="menu">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <section class="section">
-    <h1>TechFluence Agency</h1>
-    <br>
-    <div class="section-content">
-      <p>TechFluence is a tech-driven influencer marketing agency dedicated to helping brands scale through strategic collaborations with trusted creators. In today’s digital landscape, authentic connections matter more than ever. We specialize in bridging the gap between innovative brands and influential tech personalities, ensuring that marketing efforts are not only impactful but also genuine.</p>
-      <img src="../styles/office.jpg" alt="abtus1" />
-      <p>Our approach is built on data-driven insights, creativity, and industry expertise. We curate influencer partnerships that align seamlessly with brand values, fostering engagement, credibility, and long-term growth. Whether you’re looking to increase visibility, drive sales, or establish authority in the tech space, we tailor campaigns to meet your specific goals.</p>
-      <img src="../styles/earthinhand.jpg" alt="abtus2" />
-      <p>At TechFluence, we believe that technology and influence go hand in hand. By leveraging the power of community and storytelling, we help brands connect with audiences in meaningful ways. Through a combination of strategy, innovation, and collaboration, we turn influencer marketing into a catalyst for success.</p>
-    </div>
-  </section>
+  <main class="container">
+    <section class="section">
+      <h1>TechFluence Agency</h1>
+      <br>
+      <div class="section-content">
+        <p>TechFluence is a professional software development company focused on delivering high-quality digital solutions. From robust web applications to scalable backend systems, we craft software tailored to your business needs, ensuring performance, reliability, and innovation at every step.</p>
+        <img src="../styles/office.jpg" alt="abtus1" />
+        <p>We combine deep technical expertise with strategic thinking to build solutions that solve real-world problems. While currently led by our founder and principal developer, Ekaterine Razmadze, TechFluence is designed to grow, expanding to include specialists in cybersecurity, mobile applications, and full-stack development as projects scale. Maryam Hoque plays a key role as manager and creative lead, overseeing design, content, and social media to ensure our projects are presented professionally and reach the right audience.</p>
+        <img src="../styles/earthinhand.jpg" alt="abtus2" />
+        <p>Ekaterine Razmadze founded TechFluence to create software solutions that combine technical excellence with practical results. With hands-on expertise in development and a vision for scalable, innovative growth, Ekaterine ensures every project is delivered with precision, reliability, and a focus on long-term impact.</p>
+      </div>
+    </section>
 
-  <section class="founder-story">
-    <h2>About The Founder</h2>
-    <p>Ekaterine Razmadze built TechFluence Agency from the ground up with the mission to create powerful influencer collaborations that drive real business results. Every campaign, partnership, and decision is guided by a hands-on approach to ensure brands get the exposure they deserve.</p>
-  </section>
+    <section class="section panel">
+      <h2 class="center">Our Leadership</h2>
 
-  <footer>
-    <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
-  </footer>
+      <div style="margin-top:40px" class="founder-profile">
+        <h3>Ekaterine Razmadze — Founder & Principal Developer</h3>
+        <p>Ekaterine built TechFluence from the ground up, combining technical mastery with strategic vision. She oversees all core development projects, ensures high-quality execution, and personally guides client solutions. Her hands-on approach guarantees that every initiative meets the highest standards of innovation and impact.</p>
+      </div>
+
+      <div style="margin-top:40px" class="founder-profile">
+        <h3>Maryam Hoque — Manager & Creative Lead</h3>
+        <p>Maryam manages operations and leads all creative aspects of TechFluence. She oversees design, content, and social media strategy, ensuring that every project is presented professionally and resonates with the target audience. Her organizational skills and creative insight keep the team aligned and projects running smoothly.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
+    </footer>
+  </main>
 
   <script>
-    function toggleMenu(){ document.getElementById('menu').classList.toggle('show'); }
+    document.addEventListener('click', (e)=>{
+      const menu = document.getElementById('menu');
+      if(!e.target.closest('.hamburger') && !e.target.closest('#menu') && window.innerWidth <= 768){
+        menu.classList.remove('show');
+      }
+    });
   </script>
 </body>
 </html>

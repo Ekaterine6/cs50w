@@ -4,16 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Services - TechFluence Agency</title>
-  <link rel="stylesheet" href="../styles/style.css" />
   <link rel="icon" type="image/jpg" href="../styles/faviconline.jpg" />
+  <link rel="stylesheet" href="../styles/style.css" />
 </head>
 
 <body>
   <header>
-    <div class="container nav">
+    <div class="container header-inner">
       <img src="../styles/logo.png" alt="Logo" class="logo"/>
       <nav>
-        <ul>
+        <div class="hamburger" onclick="document.getElementById('menu').classList.toggle('show')">
+          <span></span><span></span><span></span>
+        </div>
+        <ul id="menu">
           <li><a href="../index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="services.html">Services</a></li>
@@ -24,33 +27,60 @@
       </nav>
     </div>
   </header>
-  <section class="section section-1">
-    <h1>Our Services</h1>
-    <p>Our services are designed to deliver measurable success for your brand.</p>
 
-      <div class="section-content">
-        <p>At <strong>TechFluence Agency</strong>, we specialize in crafting impactful influencer marketing campaigns that drive brand awareness, engagement, and conversions. Our expertise ensures seamless collaboration between brands and creators, delivering measurable results and authentic connections.</p>
+  <main class="container">
+    <section class="section hero">
+      <div>
+        <h1>Our Services</h1>
+        <p class="lead">At TechFluence, we combine deep technical expertise with strategic thinking to deliver solutions that solve real-world problems.</p>
 
-        <h2>Influencer Campaign Strategy</h2>
-        <p>We design tailored campaign strategies that align with your brand’s goals, target audience, and industry trends. Our approach ensures maximum impact, driving engagement and ROI through innovative storytelling and strategic execution.</p>
+        <div class="panel">
+          <div class="services-grid" aria-hidden="false">
+            <div class="service-card">
+              <h3>Custom Software Development</h3>
+              <p>We design and develop custom software solutions to meet your unique business needs. From web applications to enterprise systems, our code is clean, efficient, and scalable.</p>
+            </div>
+            <div class="service-card">
+              <h3>Mobile & Web Applications</h3>
+              <p>Whether it’s iOS, Android, or responsive web apps, we create intuitive and high-performance applications that provide seamless user experiences and drive engagement.</p>
+            </div>
+            <div class="service-card">
+              <h3>Cybersecurity & Compliance</h3>
+              <p>Protecting your systems and data is critical. We implement security best practices, audits, and compliance measures to safeguard your applications and infrastructure.</p>
+            </div>
+            <div class="service-card">
+              <h3>Project Management & Technical Consultation</h3>
+              <p>We guide your project from conception to deployment, offering technical consultation, architecture design, and project management to ensure timely and successful delivery.</p>
+            </div>
+          </div>
 
-        <h2>Brand-Creator Matching</h2>
-        <p>Finding the right creators is key to a successful campaign. We leverage data-driven insights and industry expertise to match your brand with influencers who genuinely resonate with your audience, fostering authentic partnerships that enhance credibility and reach.</p>
+          <div class="section-content mt-12">
+            <h2>Performance Optimization & Maintenance</h2>
+            <p class="small-muted">Beyond deployment, we monitor, optimize, and maintain your software solutions to ensure peak performance, reliability, and scalability as your business grows.</p>
 
-        <h2>Campaign Management</h2>
-        <p>From concept to execution, we oversee every aspect of your influencer campaigns. Our team handles outreach, collaboration, content approvals, and timeline coordination, ensuring seamless communication and flawless execution.</p>
+            <p class="small-muted">TechFluence is a developer-led company providing tailored technology solutions for businesses of all sizes. While currently led by our founder and principal developer, Ekaterine Razmadze, we are structured to grow, expanding to include specialists in cybersecurity, mobile applications, and full-stack development as projects scale.</p>
+          </div>
+        </div>
+      </div>
 
-        <h2>Performance Analytics & Reporting</h2>
-        <p>Success is in the data. We provide in-depth performance tracking, measuring key metrics such as engagement, reach, conversions, and audience sentiment. Our detailed reports offer insights that refine strategies for future campaigns, ensuring continuous growth and optimization.</p>
+      <div class="hero-visual" aria-hidden="true">
+        <img src="../styles/office.jpg" alt="services visual" />
       </div>
     </section>
 
-
-
-  <footer>
-    <div class="container">
+    <footer>
       <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
-    </div>
-  </footer>
+    </footer>
+  </main>
+
+  <script>
+    // mobile nav helper
+    document.addEventListener('click', (e)=>{
+      const menu = document.getElementById('menu');
+      if(!e.target.closest('.hamburger') && !e.target.closest('#menu') && window.innerWidth <= 520){
+        menu.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>

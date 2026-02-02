@@ -4,170 +4,78 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact - TechFluence Agency</title>
-  <link rel="stylesheet" href="../styles/style.css" />
   <link rel="icon" type="image/jpg" href="../styles/faviconline.jpg" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .section {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: calc(100vh - 80px);
-      padding: 30px;
-    }
-
-    .section-1 {
-      flex-direction: column;
-      text-align: center;
-      height: 30vh;
-    }
-
-    .section-2 {
-      height: 60vh;
-    }
-
-    .form-container {
-      background-color: #111;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      border: 1px solid #333;
-      width: 100%;
-      max-width: 500px;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    form label {
-      font-weight: bold;
-    }
-
-    form input,
-    form textarea {
-      background-color: #222;
-      color: white;
-      border: 1px solid #555;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    form input:focus,
-    form textarea:focus {
-      border-color: white;
-      outline: none;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-    }
-
-    .cta-btn {
-      background-color: white;
-      color: black;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .cta-btn:hover {
-      background-color: black;
-      color: white;
-      border: 1px solid white;
-    }
-
-    footer {
-      text-align: center;
-      padding: 10px;
-      background-color: black;
-      color: #aaa;
-      font-size: 14px;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 40px;
-    }
-
-    .nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-
-    .nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .logo {
-      height: 150px;
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/style.css" />
 </head>
 
 <body>
-
-  <div class="container nav">
-    <img src="../styles/logo.png" alt="Logo" class="logo"/>
-    <nav>
-      <ul>
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <!--<li><a href="partners.html">Partners</a></li>-->
-        <li><a href="careers.html">Careers</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-
-  <section class="section section-1">
-      <h1>Contact Us</h1>
-      <p>If you have any questions or want to collaborate, feel free to reach out!</p>
-  </section>
-
-  <section class="section section-2">
-
-    <div class="form-container">
-      <form action="https://formspree.io/f/mwpoeqdl" method="POST">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name" required />
-
-        <label for="email">Your Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required />
-
-        <label for="message">Your Message</label>
-        <textarea id="message" name="message" placeholder="Enter your message" rows="5" required></textarea>
-
-        <button type="submit" class="cta-btn">Send Message</button>
-      </form>
+  <header>
+    <div class="container header-inner">
+      <img src="../styles/logo.png" alt="Logo" class="logo"/>
+      <nav>
+        <div class="hamburger" onclick="document.getElementById('menu').classList.toggle('show')">
+          <span></span><span></span><span></span>
+        </div>
+        <ul id="menu">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <!--<li><a href="partners.html">Partners</a></li>-->
+          <li><a href="careers.html">Careers</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-  </section>
+  </header>
 
-  <footer>
-    <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
-  </footer>
+  <main class="container">
+    <section class="section center">
+      <h1>Contact Us</h1>
+      <p class="lead">If you have any questions or want to collaborate, feel free to reach out!</p>
+    </section>
 
+    <section class="section contact-grid">
+      <div class="panel">
+        <form action="https://formspree.io/f/mwpoeqdl" method="POST">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your name" required />
+
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" placeholder="Enter your message" rows="6" required></textarea>
+
+          <button type="submit" class="cta-btn">Send Message</button>
+        </form>
+      </div>
+
+      <aside class="panel">
+        <h4>Other ways to reach us</h4>
+        <p class="small-muted">We aim to respond promptly to inquiries. Feel free to follow our social profiles or send a message via the contact form.</p>
+
+        <p style="margin-top:16px;"><strong>Email:</strong> contact@techfluence.agency</p>
+        <p style="margin-top:6px;"><strong>Location:</strong> Remote / Georgia</p>
+
+        <div style="margin-top:20px;">
+          <p style="font-weight:700;color:var(--text);margin-bottom:8px">Follow</p>
+          <p class="small-muted">Instagram · LinkedIn · Twitter</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
+    </footer>
+  </main>
+
+  <script>
+    document.addEventListener('click', (e)=>{
+      const menu = document.getElementById('menu');
+      if(!e.target.closest('.hamburger') && !e.target.closest('#menu') && window.innerWidth <= 520){
+        menu.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>

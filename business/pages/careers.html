@@ -4,22 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>careers - TechFluence Agency</title>
-  <link rel="stylesheet" href="../styles/style.css" />
   <link rel="icon" type="image/jpg" href="../styles/faviconline.jpg" />
+  <link rel="stylesheet" href="../styles/style.css" />
 </head>
-<style>
-.career-img {
-  width: 500px !important;
-  height: auto !important;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
-}
-</style>
 <body>
   <header>
-    <div class="container nav">
+    <div class="container header-inner">
       <img src="../styles/logo.png" alt="Logo" class="logo"/>
       <nav>
-        <ul>
+        <div class="hamburger" onclick="document.getElementById('menu').classList.toggle('show')">
+          <span></span><span></span><span></span>
+        </div>
+        <ul id="menu">
           <li><a href="../index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="services.html">Services</a></li>
@@ -30,19 +26,43 @@
       </nav>
     </div>
   </header>
-  <section class="section section-1">
-    <h1>Join Our Team</h1>
-      <div class="section-content">
 
+  <main class="container">
+    <section class="section center">
+      <h1>Join Our Team</h1>
+    </section>
+
+    <section class="section">
+      <div class="row" style="gap:28px;align-items:start">
+        <div class="col panel">
           <p>At the moment, we are not actively hiring, but we always love connecting with talented professionals passionate about marketing, tech, and social media.</p>
           <p style="margin-top: 2rem;">Feel free to follow us for updates on future opportunities!</p>
-      </div>
-      </section>
+        </div>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
-    </div>
-  </footer>
+        <aside style="width:420px" class="panel">
+          <img src="../styles/office.jpg" alt="Office" class="career-img" />
+          <div style="margin-top:14px" class="small-muted">
+            <p style="font-weight:700;color:var(--text);margin-bottom:8px">Stay connected</p>
+            <p class="small-muted">Follow our social profiles for the latest updates on openings and company news.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 TechFluence Agency. All rights reserved.</p>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.addEventListener('click', (e)=>{
+      const menu = document.getElementById('menu');
+      if(!e.target.closest('.hamburger') && !e.target.closest('#menu') && window.innerWidth <= 520){
+        menu.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>
