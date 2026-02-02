@@ -6,6 +6,18 @@
   <title>About Us - TechFluence Agency</title>
   <link rel="icon" type="image/jpg" href="../styles/faviconline.jpg" />
   <link rel="stylesheet" href="../styles/style.css" />
+    <style>
+    #section-content img {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5); /* initial shadow */
+    }
+
+    #section-content img:hover {
+      transform: scale(1.05); /* image slightly grows on hover */
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7); /* shadow gets bigger */
+    }
+
+  </style>
 </head>
 <body>
   <header>
@@ -30,7 +42,7 @@
     <section class="section">
       <h1>TechFluence Agency</h1>
       <br>
-      <div class="section-content">
+      <div id="section-content" class="section-content">
         <p>TechFluence is a professional software development company focused on delivering high-quality digital solutions. From robust web applications to scalable backend systems, we craft software tailored to your business needs, ensuring performance, reliability, and innovation at every step.</p>
         <img src="../styles/office.jpg" alt="abtus1" />
         <p>We combine deep technical expertise with strategic thinking to build solutions that solve real-world problems. While currently led by our founder and principal developer, Ekaterine Razmadze, TechFluence is designed to grow, expanding to include specialists in cybersecurity, mobile applications, and full-stack development as projects scale. Maryam Hoque plays a key role as manager and creative lead, overseeing design, content, and social media to ensure our projects are presented professionally and reach the right audience.</p>
