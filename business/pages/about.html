@@ -24,7 +24,7 @@
     <div class="container header-inner">
       <img src="../styles/logo.png" alt="Logo" class="logo"/>
       <nav>
-        <div class="hamburger" onclick="document.getElementById('menu').classList.toggle('show')">
+        <div class="hamburger">
           <span></span><span></span><span></span>
         </div>
         <ul id="menu">
@@ -73,12 +73,20 @@
   </main>
 
   <script>
-    document.addEventListener('click', (e)=>{
-      const menu = document.getElementById('menu');
-      if(!e.target.closest('.hamburger') && !e.target.closest('#menu') && window.innerWidth <= 768){
-        menu.classList.remove('show');
-      }
-    });
+  const hamburger = document.querySelector('.hamburger');
+  const menu = document.getElementById('menu');
+
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation(); // ← CRITICAL for mobile
+    menu.classList.toggle('show');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && window.innerWidth <= 768) {
+      menu.classList.remove('show');
+    }
+  });
   </script>
+
 </body>
 </html>
