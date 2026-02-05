@@ -17,6 +17,53 @@
       box-shadow: 0 20px 40px rgba(255, 255, 255, 0.7); /* shadow gets bigger */
     }
 
+        /* Burger Menu */
+.burger-menu {
+  position: fixed;
+  top: 25px;
+  right: 30px;
+  width: 28px;
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 10010;
+}
+
+.burger-menu .bar {
+  height: 4px;
+  width: 100%;
+  background-color: #00a0ff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: fixed;
+  top: 60px;
+  right: 30px;
+  background-color: rgba(0,0,0,0.95);
+  padding: 20px;
+  border-radius: 12px;
+  display: none; /* hidden by default */
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10005;
+}
+
+.dropdown-menu a {
+  color: #00a0ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.dropdown-menu a:hover {
+  color: #fff;
+}
+
+
   </style>
 </head>
 <body>
@@ -24,22 +71,20 @@
     <div class="container header-inner">
       <img src="../styles/logo.png" alt="Logo" class="logo"/>
 
-      <nav>
-        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <!-- Burger Menu -->
+  <div class="burger-menu" id="burger-menu">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
 
-        <ul id="menu">
-          <li><a href="../index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="careers.html">Careers</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
+  <!-- Dropdown Menu -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <a href="pages/about.html">About</a>
+    <a href="pages/services.html">Services</a>
+    <a href="pages/careers.html">Careers</a>
+    <a href="pages/contact.html">Contact</a>
+  </div>
   </header>
 
   <main class="container">
@@ -74,19 +119,24 @@
   </main>
 
   <script>
-  const hamburger = document.querySelector('.hamburger');
-  const menu = document.getElementById('menu');
+      // Burger menu toggle
+  const burger = document.getElementById('burger-menu');
+  const dropdown = document.getElementById('dropdown-menu');
 
-  hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // mobile safe
-    menu.classList.toggle('show');
-    hamburger.classList.toggle('open'); // animate bars into X
-  });
+  burger.addEventListener('click', () => {
+    const isOpen = dropdown.style.display === 'flex';
+    dropdown.style.display = isOpen ? 'none' : 'flex';
 
-  document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && !hamburger.contains(e.target) && window.innerWidth <= 520) {
-      menu.classList.remove('show');
-      hamburger.classList.remove('open');
+  // animate bars into X when open
+  const bars = burger.querySelectorAll('.bar');
+    if(!isOpen){
+      bars[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+      bars[1].style.opacity = '0';
+      bars[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    } else {
+      bars[0].style.transform = 'rotate(0) translate(0,0)';
+      bars[1].style.opacity = '1';
+      bars[2].style.transform = 'rotate(0) translate(0,0)';
     }
   });
 
