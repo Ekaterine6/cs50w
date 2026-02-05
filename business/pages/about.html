@@ -23,10 +23,14 @@
   <header>
     <div class="container header-inner">
       <img src="../styles/logo.png" alt="Logo" class="logo"/>
+
       <nav>
-        <div class="hamburger">
-          <span></span><span></span><span></span>
-        </div>
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
         <ul id="menu">
           <li><a href="../index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
@@ -73,20 +77,23 @@
   </main>
 
   <script>
-  const hamburger = document.querySelector('.hamburger');
-  const menu = document.getElementById('menu');
+    const hamburger = document.querySelector('.hamburger');
+    const menu = document.getElementById('menu');
 
-  hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // ← CRITICAL for mobile
-    menu.classList.toggle('show');
-  });
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = menu.classList.toggle('show');
+      hamburger.setAttribute('aria-expanded', isOpen);
+    });
 
-  document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && window.innerWidth <= 768) {
-      menu.classList.remove('show');
-    }
-  });
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768 && !menu.contains(e.target)) {
+        menu.classList.remove('show');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
   </script>
+
 
 </body>
 </html>
