@@ -63,6 +63,32 @@
   color: #fff;
 }
 
+/* Careers page mobile adjustments */
+@media (max-width: 520px) {
+  /* Stack the text and image vertically */
+  .row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Make the aside (image) take full width */
+  #section-content aside {
+    width: 100% !important;
+  }
+
+  /* Make the image responsive */
+  #section-content img.career-img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* reduce panel padding for small screens */
+  .panel {
+    padding: 16px;
+  }
+}
+
+
 
   </style>
 </head>
