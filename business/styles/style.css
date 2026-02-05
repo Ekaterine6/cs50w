@@ -72,10 +72,6 @@ nav a:hover{
   box-shadow: 0 10px 30px var(--shadow-soft);
 }
 
-/* Hamburger for mobile */
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
-.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;display:block}
-
 /* Generic panels, cards */
 .panel{
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -173,7 +169,6 @@ footer{
 }
 @media (max-width: 520px){
   nav ul{display:none;position:absolute;top:72px;right:12px;background:#060606;border-radius:10px;padding:12px;width:220px;border:1px solid rgba(255,255,255,0.03)}
-  .hamburger{display:flex}
   .logo{height:48px}
   .hero-visual{height:220px}
   .hero{padding-top:18px}
@@ -182,9 +177,6 @@ footer{
 /* Small utilities */
 .center{text-align:center}
 .mt-12{margin-top:12px}
-
-
-
 
 /* ─── Restore hover shadow and scale effects for section images ─── */
 .section-content img {
@@ -228,11 +220,80 @@ footer{
   transform: translateY(-2px);
 }
 
+/* ─── Hamburger Button (like index.html) ─── */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  width: 28px;
+  height: 22px;
+  z-index: 10010;
+}
 
-@media (max-width: 520px){
-  nav ul.show{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
+.hamburger span {
+  display: block;
+  height: 4px;
+  width: 100%;
+  background-color: #00a0ff; /* index.html accent */
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Animate bars into X */
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Menu (ul#menu) styling */
+#menu {
+  position: absolute;
+  top: 72px; /* below header */
+  right: 12px;
+  background: rgba(0,0,0,0.95);
+  border-radius: 12px;
+  padding: 16px;
+  width: 220px;
+  list-style: none;
+  display: none; /* hidden by default */
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10005;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+  transition: all 0.25s ease;
+}
+
+#menu.show {
+  display: flex;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+#menu li a {
+  color: #00a0ff; /* blue accent */
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+#menu li a:hover {
+  color: #fff;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Desktop overrides */
+@media (min-width: 521px) {
+  #menu { display: flex !important; flex-direction: row; gap: 18px; position: static; background: none; box-shadow: none; padding: 0; width: auto; }
+  #menu li a { color: var(--text); }
+  .hamburger { display: none; }
 }

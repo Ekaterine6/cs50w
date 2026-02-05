@@ -89,15 +89,18 @@
   const menu = document.getElementById('menu');
 
   hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // critical for mobile
+    e.stopPropagation(); // mobile safe
     menu.classList.toggle('show');
+    hamburger.classList.toggle('open'); // animate bars into X
   });
 
   document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && window.innerWidth <= 520) {
+    if (!menu.contains(e.target) && !hamburger.contains(e.target) && window.innerWidth <= 520) {
       menu.classList.remove('show');
+      hamburger.classList.remove('open');
     }
   });
+
   </script>
 
 </body>
